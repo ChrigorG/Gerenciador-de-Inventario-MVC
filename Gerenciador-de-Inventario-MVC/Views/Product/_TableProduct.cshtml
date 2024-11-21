@@ -1,0 +1,81 @@
+﻿@model Application.DTO.ProductDTO
+
+@{
+    Layout = "_Layout";
+}
+
+<table id="productsTable" class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">
+                <input type="checkbox" id="selectAll" />
+            </th>
+            <th scope="col">Nome</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Preço</th>
+            <th scope="col">Estoque</th>
+            <th scope="col">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Exemplo de linhas da tabela -->
+        <tr>
+            <td>
+                <input type="checkbox" class="selectItem" />
+            </td>
+            <td>Produto A</td>
+            <td>Categoria X</td>
+            <td>R$ 100,00</td>
+            <td>50</td>
+            <td>
+                <a href="#" class="btn btn-primary btn-sm">Editar</a>
+                <a href="#" class="btn btn-danger btn-sm">Excluir</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" class="selectItem" />
+            </td>
+            <td>Produto B</td>
+            <td>Categoria Y</td>
+            <td>R$ 150,00</td>
+            <td>30</td>
+            <td>
+                <a href="#" class="btn btn-primary btn-sm">Editar</a>
+                <a href="#" class="btn btn-danger btn-sm">Excluir</a>
+            </td>
+        </tr>
+        <!-- Adicione mais produtos aqui -->
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        // Inicializar DataTables
+        var table = $('#productsTable').DataTable({
+            columnDefs: [
+                { orderable: false, targets: 0 }, // Desabilitar ordenação na coluna de seleção
+            ],
+            order: [[1, 'asc']], // Coluna inicial para ordenação (#)
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/Portuguese-Brasil.json" // Tradução para português
+            }
+        });
+
+        // Selecionar todos os checkboxes
+        $('#selectAll').on('click', function () {
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            $('input[type="checkbox"].selectItem', rows).prop('checked', this.checked);
+        });
+
+        // Atualizar o checkbox principal ao alterar qualquer checkbox individual
+        $('#productsTable tbody').on('change', 'input[type="checkbox"].selectItem', function () {
+            if (!this.checked) {
+                var el = $('#selectAll').get(0);
+                if (el && el.checked && ('indeterminate' in el)) {
+                    el.indeterminate = true;
+                }
+            }
+        });
+    });
+</script>

@@ -7,4 +7,14 @@
     <RootNamespace>Gerenciador_de_Inventario_MVC</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\DependencyInjection\InfrastructureIoC.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Employee\" />
+    <Folder Include="Views\StockMovements\" />
+  </ItemGroup>
+
 </Project>

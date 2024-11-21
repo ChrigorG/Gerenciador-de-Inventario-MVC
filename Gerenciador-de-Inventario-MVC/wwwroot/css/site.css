@@ -20,3 +20,27 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+html, body {
+    height: 100%; /* O corpo ocupa toda a altura da janela */
+    margin: 0; /* Remove margens padrão */
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1; /* Faz o container expandir para preencher o espaço restante */
+}
+
+footer {
+    flex-shrink: 0; /* Garante que o footer permaneça no final da página */
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}

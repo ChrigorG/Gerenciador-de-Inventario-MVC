@@ -1,7 +1,7 @@
 ﻿
 namespace Domain.Entities
 {
-    public class StockMovements : BaseDomain
+    public class StockMovements : BaseEntities
     {
         public int IdProduct { get; set; }
         public string MovementType { get; set; } = string.Empty;

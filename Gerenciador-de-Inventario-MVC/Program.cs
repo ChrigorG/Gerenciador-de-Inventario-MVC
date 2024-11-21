@@ -1,7 +1,12 @@
+using InfrastructureIoC;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Adicionar serviços ao contêiner
+builder.Services.AddInfrastructureIoC();
 
 var app = builder.Build();
 

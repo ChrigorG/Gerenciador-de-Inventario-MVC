@@ -1,7 +1,7 @@
 ﻿
 namespace Domain.Entities
 {
-    public class Product
+    public class Product : BaseEntities
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

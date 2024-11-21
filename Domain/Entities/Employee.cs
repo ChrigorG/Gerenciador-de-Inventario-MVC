@@ -1,7 +1,7 @@
 ﻿
 namespace Domain.Entities
 {
-    public class Employee : BaseDomain
+    public class Employee : BaseEntities
     {
         public int IdPermissionGroup { get; set; }
         public string Name { get; set; } = string.Empty;
