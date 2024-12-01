@@ -1,0 +1,47 @@
+﻿@using Application.DTO
+@model Application.DTO.PermissionGroupDTO
+
+@{
+}
+
+<table id="permissionGroupTable" class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">
+                <input type="checkbox" id="selectAll" />
+            </th>
+            <th scope="col">Id</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (PermissionGroupDTO permissionGroupDTO in Model.ListPermissionGroup)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" class="selectItem" />
+                </td>
+                <td>@permissionGroupDTO.Id</td>
+                <td>@permissionGroupDTO.Name</td>
+                <td>@permissionGroupDTO.Description</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="gear-button">
+                            <span class="material-symbols-outlined">
+                                settings
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="/editar/1">Editar</a></li>
+                            <li><a href="/detalhar/1">Detalhar</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/js/Domain/StockMovements/TableStockMovements.js" asp-append-version="true"></script>

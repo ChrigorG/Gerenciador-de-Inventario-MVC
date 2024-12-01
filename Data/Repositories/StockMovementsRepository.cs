@@ -4,7 +4,7 @@ using Domain.Interfaces;
 
 namespace Data.Repositories
 {
-    public class StockMovementsRepository : BaseRepository<StockMovements>, IBaseRepository<StockMovements>
+    public class StockMovementsRepository : BaseRepository<StockMovements>, IStockMovementsRepository
     {
         public StockMovementsRepository(AppDbContext db) : base(db) { }
     }

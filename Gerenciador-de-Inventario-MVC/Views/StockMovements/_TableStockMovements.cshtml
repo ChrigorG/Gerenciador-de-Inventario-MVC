@@ -1,0 +1,52 @@
+﻿@using Application.DTO
+@model Application.DTO.StockMovementsDTO
+
+@{
+}
+
+<table id="stockMovementsTable" class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">
+                <input type="checkbox" id="selectAll" />
+            </th>
+            <th scope="col">Id</th>
+            <th scope="col">Produto</th>
+            <th scope="col">Unidade de Medida</th>
+            <th scope="col">Tipo de Movimentação</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Valor x Quantidade</th>
+            <th scope="col">Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (StockMovementsDTO stock in Model.ListStockMovements)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" class="selectItem" />
+                </td>
+                <td>@stock.Id</td>
+                <td>@stock.ProductName</td>
+                <td>@stock.UnitType</td>
+                <td>@stock.MovementType</td>
+                <td>@stock.Quantity</td>
+                <td>R$ @(stock.ProductPrice * stock.Quantity)</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="gear-button">
+                            <span class="material-symbols-outlined">
+                                settings
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="/detalhar/1">Detalhar</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/js/Domain/Product/TableProduct.js" asp-append-version="true"></script>

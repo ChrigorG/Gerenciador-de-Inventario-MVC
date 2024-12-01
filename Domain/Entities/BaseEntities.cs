@@ -10,7 +10,6 @@ namespace Domain.Entities
         [Column("id")]
         public int Id { get; set; }
 
-        [Required]
         [Column("status_deleted")]
         public bool StatusDeleted { get; set; } = false;
 

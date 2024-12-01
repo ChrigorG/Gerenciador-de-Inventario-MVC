@@ -1,7 +1,6 @@
 ﻿@model Application.DTO.ProductDTO
 
 @{
-
 }
 
 <div class="container mt-4">
@@ -13,7 +12,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Produtos</li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
                 </ol>
             </nav>
         </div>
@@ -21,9 +20,6 @@
 
     <!-- Card Inferior com Tabela -->
     <div class="card">
-        <div class="card-header">
-            <h5 class="mb-0">Lista de Produtos</h5>
-        </div>
         <div class="card-body">
             <div class="table-responsive">
                 <partial name="_TableProduct" model="Model" />

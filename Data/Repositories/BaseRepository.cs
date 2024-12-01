@@ -14,14 +14,14 @@ namespace Data.Repositories
             _db = db;
         }
 
-        public async Task<IEnumerable<T>> Get()
+        public async Task<List<T>> Get()
         {
-            return await _db.Set<T>().ToListAsync();
+            return await _db.Set<T>().Where(x => x.StatusDeleted != true).ToListAsync();
         }
 
         public async Task<T?> Get(int id)
         {
-            return await _db.Set<T>().FindAsync(id);
+            return await _db.Set<T>().FirstOrDefaultAsync(x => x.Id == id && x.StatusDeleted != true);
         }
 
         public async Task<T?> Add(T entity)
