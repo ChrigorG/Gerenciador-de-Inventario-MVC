@@ -1,20 +1,12 @@
-﻿$(document).ready(function () {
-    // Inicializar DataTables
-    var table = new DataTableHelper('#permissionGroupTable', {
-        enableExport: false,
-        order: [[1, 'asc']],
-    }).init();
-});
-
-async function OpenDetailPermissionGroup(id) {
+﻿async function OpenFormPermissionGroup(id) {
     $.ajax({
-        url: "/PermissionGroup/Detail",
+        url: "/PermissionGroup/Form",
         type: "POST",
         data: { id: id },
         success: function (response) {
             if (response.status) {
                 new Modal({
-                    id: "detail-permission-group-modal",
+                    id: "form-permission-group-modal",
                     html: response.view
                 }).Create();
             } else {

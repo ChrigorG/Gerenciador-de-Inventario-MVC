@@ -1,22 +1,22 @@
 ﻿@using Shared.Helper
-@model Application.DTO.ProductDTO
+@model Application.DTO.EmployeeDTO
 
 @{
     this.Layout = null;
 }
 
-<div class="modal fade" id="form-product-modal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+<div class="modal fade" id="form-employee-modal" tabindex="-1" role="dialog" aria-labelledby="form-employee-modalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel">@Model.Title</h5>
+                <h5 class="modal-title">@Model.Title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <!-- Form -->
-                <form id="productForm">
+                <form id="employeeForm">
                     <div class="form-group">
                         <label for="id">Id</label>
                         <input type="number" class="form-control" asp-for="Id" disabled />
@@ -26,12 +26,20 @@
                         <input type="text" class="form-control" asp-for="Name" required />
                     </div>
                     <div class="form-group">
-                        <label for="description">Descrição</label>
-                        <input type="text" class="form-control" asp-for="Description" required />
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" asp-for="Email" required />
                     </div>
                     <div class="form-group">
-                        <label for="price">Preço</label>
-                        <input type="number" class="form-control" asp-for="Price" step="0.01" required />
+                        <label for="password">Senha</label>
+                        <input type="password" name="Password" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="function">Função/Cargo</label>
+                        <input type="text" class="form-control" asp-for="Function"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="situation">Situação</label>
+                        <input type="text" class="form-control" asp-for="Status" required />
                     </div>
                 </form>
             </div>
@@ -51,8 +59,8 @@
                         </div>
                     }
                 </div>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
-                <button type="submit" class="btn btn-primary" id="submitProductForm">Salvar</button>
+                <button type="button" class="btn btn-secondary" id="closeEmployeeForm" data-dismiss="modal">Voltar</button>
+                <button type="submit" class="btn btn-primary" id="submitEmployeeForm">Salvar</button>
             </div>
         </div>
     </div>

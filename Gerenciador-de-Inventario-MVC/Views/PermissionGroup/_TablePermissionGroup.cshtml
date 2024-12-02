@@ -2,6 +2,7 @@
 @model Application.DTO.PermissionGroupDTO
 
 @{
+    this.Layout = null;
 }
 
 <table id="permissionGroupTable" class="table table-bordered table-striped table-hover">
@@ -34,8 +35,8 @@
                             </span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="/editar/1">Editar</a></li>
-                            <li><a href="/detalhar/1">Detalhar</a></li>
+                            <li><a onclick="OpenFormPermissionGroup(@permissionGroupDTO.Id)">Editar</a></li>
+                            <li><a onclick="OpenDetailPermissionGroup(@permissionGroupDTO.Id)">Detalhar</a></li>
                         </ul>
                     </div>
                 </td>

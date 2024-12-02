@@ -1,8 +1,8 @@
-﻿async function OpenFormEmployee(idEmployee) {
+﻿async function OpenFormEmployee(id) {
     $.ajax({
         url: "/Employee/Form",
         type: "POST",
-        data: { idEmployee: idEmployee },
+        data: { id: id },
         success: function (response) {
             if (response.status) {
                 new Modal({

@@ -9,14 +9,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel">@Model.Title</h5>
+                <h5 class="modal-title">@Model.Title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <!-- Form -->
-                <form id="productForm">
+                <form id="permissionGroupForm">
                     <div class="form-group">
                         <label for="id">Id</label>
                         <input type="number" class="form-control" asp-for="Id" disabled />
@@ -47,8 +47,8 @@
                         </div>
                     }
                 </div>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
-                <button type="submit" class="btn btn-primary" id="submitProductForm">Salvar</button>
+                <button type="button" class="btn btn-secondary" id="closePermissionGroupForm" data-dismiss="modal">Voltar</button>
+                <button type="submit" class="btn btn-primary" id="submitPermissionGroupForm">Salvar</button>
             </div>
         </div>
     </div>

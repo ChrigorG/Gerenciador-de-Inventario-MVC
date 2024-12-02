@@ -14,6 +14,8 @@ namespace Data.Repositories
             _db = db;
         }
 
+        public async Task<bool> Any() => await _db.Set<T>().AnyAsync();
+
         public async Task<List<T>> Get()
         {
             return await _db.Set<T>().Where(x => x.StatusDeleted != true).ToListAsync();

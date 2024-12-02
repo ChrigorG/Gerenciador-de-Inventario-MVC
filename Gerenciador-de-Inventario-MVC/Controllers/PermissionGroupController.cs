@@ -1,5 +1,6 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
+using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Helper.Services.Interface;
 
@@ -71,6 +72,21 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             {
                 _responseDTO.StatusErro = true;
                 _responseDTO.Message = "Ops, tivemos um problema interno, não foi possível gravar sua solicitação!";
+                return Json(_responseDTO);
+            }
+        }
+
+        public async Task<IActionResult> Detail(int id)
+        {
+            try
+            {
+                PermissionGroupDTO permissionGroupDTO = await _permissionGroupService.FormPermissionGroup(id);
+                _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_Detail", permissionGroupDTO);
+                return Json(_responseDTO);
+            } catch (Exception)
+            {
+                _responseDTO.StatusErro = true;
+                _responseDTO.Message = "Ops, tivemos um problema interno, não foi possível abrir o detalhar!";
                 return Json(_responseDTO);
             }
         }

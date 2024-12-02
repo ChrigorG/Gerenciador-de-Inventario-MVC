@@ -2,6 +2,7 @@
 @model Application.DTO.ProductDTO
 
 @{
+    this.Layout = null;
 }
 
 <table id="productsTable" class="table table-bordered table-striped table-hover">
@@ -40,8 +41,8 @@
                             </span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="/editar/1">Editar</a></li>
-                            <li><a href="/detalhar/1">Detalhar</a></li>
+                            <li><a onclick="OpenFormProduct(@product.Id)">Editar</a></li>
+                            <li><a onclick="OpenDetailProduct(@product.Id)">Detalhar</a></li>
                         </ul>
                     </div>
                 </td>

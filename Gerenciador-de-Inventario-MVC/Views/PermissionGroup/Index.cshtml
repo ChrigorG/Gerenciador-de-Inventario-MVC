@@ -21,9 +21,17 @@
     <!-- Card Inferior com Tabela -->
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive">
+            <button type="button" class="btn btn-success" onclick="OpenFormPermissionGroup(0)">
+                <span class="material-symbols-outlined">
+                    add
+                </span>
+                Cadastrar
+            </button>
+            <div id="idDivTablePermissionGroup" class="table-responsive">
                 <partial name="_TablePermissionGroup" model="Model" />
             </div>
         </div>
     </div>
 </div>
+
+<script src="~/js/Domain/PermissionGroup/Index.js" asp-append-version="true"></script>

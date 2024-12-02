@@ -75,6 +75,21 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             }
         }
 
+        public async Task<IActionResult> Detail(int id)
+        {
+            try
+            {
+                EmployeeDTO employeeDTO = await _employeeService.FormEmployee(id);
+                _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_Detail", employeeDTO);
+                return Json(_responseDTO);
+            } catch (Exception)
+            {
+                _responseDTO.StatusErro = true;
+                _responseDTO.Message = "Ops, tivemos um problema interno, não foi possível abrir o detalhar!";
+                return Json(_responseDTO);
+            }
+        }
+
         public async Task<IActionResult> Delete(int id)
         {
             try

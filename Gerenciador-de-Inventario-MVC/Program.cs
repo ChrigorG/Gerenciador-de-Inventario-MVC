@@ -1,4 +1,8 @@
+using Application.Services;
+using Data.Context;
 using InfrastructureIoC;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,5 +32,17 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Aplicando a migrations automaticamente
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+
+    var dbContext = serviceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
+
+    var initDbService = serviceProvider.GetRequiredService<InitDbService>();
+    await initDbService.InitDb();
+}
 
 app.Run();

@@ -8,11 +8,11 @@
     <!-- Card Superior -->
     <div class="card mb-4">
         <div class="card-body d-flex justify-content-between align-items-center">
-            <h4 class="card-title mb-0">Usuarios</h4>
+            <h4 class="card-title mb-0">@Model.Title</h4>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
                 </ol>
             </nav>
         </div>
@@ -21,9 +21,17 @@
     <!-- Card Inferior com Tabela -->
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive">
+            <button type="button" class="btn btn-success" onclick="OpenFormEmployee(0)">
+                <span class="material-symbols-outlined">
+                    add
+                </span>
+                Cadastrar
+            </button>
+            <div id="idDivEmployeeTable" class="table-responsive">
                 <partial name="_TableEmployee" model="Model" />
             </div>
         </div>
     </div>
 </div>
+
+<script src="~/js/Domain/Employee/Index.js" asp-append-version="true"></script>

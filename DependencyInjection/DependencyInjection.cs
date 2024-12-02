@@ -2,7 +2,9 @@
 using Application.Services;
 using Data.Repositories;
 using Domain.Interfaces;
+using Helper.Infra;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Helper.Services.Interface;
 
 namespace InfrastructureIoC
 {
@@ -21,6 +23,8 @@ namespace InfrastructureIoC
             services.AddScoped<IStockMovementsService, StockMovementsService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IPermissionGroupService, PermissionGroupService>();
+
+            services.AddScoped<IViewRenderService, ViewRenderService>();
 
             return services;
         }

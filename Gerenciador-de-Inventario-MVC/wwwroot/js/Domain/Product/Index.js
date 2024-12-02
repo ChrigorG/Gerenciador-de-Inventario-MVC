@@ -1,8 +1,8 @@
-﻿async function OpenFormProduct(idProduct) {
+﻿async function OpenFormProduct(id) {
     $.ajax({
         url: "/Product/Form",
         type: "POST",
-        data: { idProduct: idProduct },
+        data: { id: id },
         success: function (response) {
             if (response.status) {
                 new Modal({
