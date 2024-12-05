@@ -1,7 +1,6 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Helper.Services.Interface;
 
 namespace Gerenciador_de_Inventario_MVC.Controllers
 {
@@ -14,11 +13,11 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             _stockMovementsService = stockMovementsService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             try
             {
-                StockMovementsDTO stockMovementsDTO = await _stockMovementsService.GetStockMovements();
+                StockMovementsDTO stockMovementsDTO = _stockMovementsService.GetStockMovements();
                 return View(stockMovementsDTO);
             } catch (Exception)
             {

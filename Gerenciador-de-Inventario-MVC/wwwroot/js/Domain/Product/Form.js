@@ -11,7 +11,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/Product/Form",
+            url: "/Product/Save",
             data: $form.serializeArray(),
             success: function (response) {
                 if (!response.statusErro) {
@@ -24,11 +24,18 @@
                         icon: "success"
                     });
                 } else {
-                    Swal.fire({
-                        title: "Atenção",
-                        text: response.message,
-                        icon: "warning"
-                    });
+                    if (true) {
+                        new Modal({
+                            id: "form-product-modal",
+                            html: response.view
+                        }).Create();
+                    } else {
+                        Swal.fire({
+                            title: "Atenção",
+                            text: response.message,
+                            icon: "warning"
+                        });
+                    }
                 }
             },
             error: function (xhr, status, error) {

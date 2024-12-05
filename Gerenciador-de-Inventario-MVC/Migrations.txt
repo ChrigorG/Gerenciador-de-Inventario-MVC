@@ -1,0 +1,36 @@
+﻿1º Verificar se já está instalado o SDK do Entity Framework Core
+
+	PM> dotnet tool list -g
+
+		Obs.: Se aparacer algum coisa como isso (dotnet-ef 8.0.6 dotnet-ef) é pq já está instalado
+
+	Se não tiver instalado, execute:
+
+	PM> dotnet tool install --global dotnet-ef
+
+
+
+3 Verificar se está na pasta correta do projeto MVC (Se não, executar o comando)
+
+	PM> cd .\Gerenciador-de-Inventario-MVC
+
+
+
+2º Adicionar uma nova migração inicial
+
+	PM> dotnet ef migrations add InitialCreate --project ../Data --startup-project ../Gerenciador-de-Inventario-MVC
+
+
+
+3º Após adicionar a migração, aplique-a ao banco de dados
+
+	PM> dotnet ef database update
+
+
+
+
+
+
+Para criar uma Nova Migration (Atualizar o banco de dados com novas alterações)
+
+	PM> dotnet ef migrations add NomeDaNovaMigracao --project ../Data --startup-project ../Gerenciador-de-Inventario-MVC

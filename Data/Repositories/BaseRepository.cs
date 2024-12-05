@@ -1,7 +1,6 @@
 ﻿using Data.Context;
 using Domain.Entities;
 using Domain.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
@@ -14,25 +13,25 @@ namespace Data.Repositories
             _db = db;
         }
 
-        public async Task<bool> Any() => await _db.Set<T>().AnyAsync();
+        public bool Any() => _db.Set<T>().Any();
 
-        public async Task<List<T>> Get()
+        public List<T> Get()
         {
-            return await _db.Set<T>().Where(x => x.StatusDeleted != true).ToListAsync();
+            return _db.Set<T>().Where(x => x.StatusDeleted != true).ToList();
         }
 
-        public async Task<T?> Get(int id)
+        public T? Get(int id)
         {
-            return await _db.Set<T>().FirstOrDefaultAsync(x => x.Id == id && x.StatusDeleted != true);
+            return _db.Set<T>().FirstOrDefault(x => x.Id == id && x.StatusDeleted != true);
         }
 
-        public async Task<T?> Add(T entity)
+        public T? Add(T entity)
         {
             try
             {
                 entity.DatetimeCreate = DateTime.UtcNow;
                 _db.Add(entity);
-                await _db.SaveChangesAsync();
+                _db.SaveChanges();
                 return entity;
             } catch (Exception)
             {
@@ -40,13 +39,13 @@ namespace Data.Repositories
             }
         }
 
-        public async Task<T?> Update(T entity)
+        public T? Update(T entity)
         {
             try
             {
                 entity.DatetimeUpdated = DateTime.UtcNow;
                 _db.Update(entity);
-                await _db.SaveChangesAsync();
+                _db.SaveChanges();
                 return entity;
             } catch (Exception)
             {
@@ -54,10 +53,10 @@ namespace Data.Repositories
             }
         }
 
-        public async Task<T?> Delete(T entity)
+        public T? Delete(T entity)
         {
             entity.StatusDeleted = true;
-            return await Update(entity);
+            return Update(entity);
         }
     }
 }

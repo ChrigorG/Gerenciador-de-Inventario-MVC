@@ -4,12 +4,12 @@ namespace Application.Interfaces
 {
     public interface IEmployeeService
     {
-        Task<EmployeeDTO> GetEmployee();
+        EmployeeDTO GetEmployee();
 
-        Task<EmployeeDTO> FormEmployee(int id);
+        EmployeeDTO FormEmployee(int id);
 
-        Task<EmployeeDTO> SaveEmploye(EmployeeDTO employeeDTO);
+        EmployeeDTO SaveEmploye(EmployeeDTO employeeDTO);
 
-        Task<EmployeeDTO> DeleteEmploye(int id);
+        EmployeeDTO DeleteEmploye(int id);
     }
 }

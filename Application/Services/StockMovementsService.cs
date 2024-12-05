@@ -18,18 +18,18 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<StockMovementsDTO> GetStockMovements()
+        public StockMovementsDTO GetStockMovements()
         {
             return new StockMovementsDTO()
             {
                 Title = "Movimentação de Estoque",
-                ListStockMovements = await GetList()
+                ListStockMovements = GetList()
             };
         }
 
-        private async Task<List<StockMovementsDTO>> GetList()
+        private List<StockMovementsDTO> GetList()
         {
-            List<StockMovements> stockMovements = await _stockMovementsRepository.Get();
+            List<StockMovements> stockMovements = _stockMovementsRepository.Get();
             return _mapper.Map<List<StockMovementsDTO>>(stockMovements);
         }
     }

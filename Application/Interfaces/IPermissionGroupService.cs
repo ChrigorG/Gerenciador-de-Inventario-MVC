@@ -4,12 +4,12 @@ namespace Application.Interfaces
 {
     public interface IPermissionGroupService
     {
-        Task<PermissionGroupDTO> GetPermissionGroup();
+        PermissionGroupDTO GetPermissionGroup();
 
-        Task<PermissionGroupDTO> FormPermissionGroup(int id);
+        PermissionGroupDTO FormPermissionGroup(int id);
 
-        Task<PermissionGroupDTO> SavePermissionGroup(PermissionGroupDTO permissionGroupDTO);
+        PermissionGroupDTO SavePermissionGroup(PermissionGroupDTO permissionGroupDTO);
 
-        Task<PermissionGroupDTO> DeletePermissionGroup(int id);
+        PermissionGroupDTO DeletePermissionGroup(int id);
     }
 }

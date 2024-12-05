@@ -19,11 +19,11 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             _responseDTO = new ResponseDTO();
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             try
             {
-                ProductDTO productDTO = await _productService.GetProduct();
+                ProductDTO productDTO = _productService.GetProduct();
                 return View(productDTO);
             } catch (Exception)
             {
@@ -31,12 +31,12 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             }
         }
 
-        public async Task<IActionResult> Form(int id)
+        public IActionResult Form(int id)
         {
             try
             {
-                ProductDTO productDTO = await _productService.FormProduct(id);
-                _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_Form", productDTO);
+                ProductDTO productDTO = _productService.FormProduct(id);
+                _responseDTO.View = _viewRenderService.RenderToString(this, "_Form", productDTO);
                 return Json(_responseDTO);
             } catch (Exception)
             {
@@ -53,11 +53,11 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
                 if (!ModelState.IsValid)
                 {
                     _responseDTO.StatusErro = true;
-                    _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_Form", productDTO);
+                    _responseDTO.View = _viewRenderService.RenderToString(this, "_Form", productDTO);
                     return Json(_responseDTO);
                 }
 
-                productDTO = await _productService.SaveProduct(productDTO);
+                productDTO = _productService.SaveProduct(productDTO);
                 if (productDTO.StatusErroMessage)
                 {
                     _responseDTO.StatusErro = true;
@@ -65,7 +65,7 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
                     return Json(_responseDTO);
                 }
 
-                _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_TableProduct", productDTO);
+                _responseDTO.View = _viewRenderService.RenderToString(this, "_TableProduct", productDTO);
                 return Json(_responseDTO);
             } catch (Exception)
             {
@@ -79,8 +79,8 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
         {
             try
             {
-                ProductDTO productDTO = await _productService.FormProduct(id);
-                _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_Detail", productDTO);
+                ProductDTO productDTO = _productService.FormProduct(id);
+                _responseDTO.View = _viewRenderService.RenderToString(this, "_Detail", productDTO);
                 return Json(_responseDTO);
             } catch (Exception)
             {
@@ -90,11 +90,11 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             }
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
             try
             {
-                ProductDTO productDTO = await _productService.DeleteProduct(id);
+                ProductDTO productDTO = _productService.DeleteProduct(id);
                 if (productDTO.StatusErroMessage)
                 {
                     _responseDTO.StatusErro = true;
@@ -102,7 +102,7 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
                     return Json(_responseDTO);
                 }
 
-                _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_TableProduct", productDTO);
+                _responseDTO.View = _viewRenderService.RenderToString(this, "_TableProduct", productDTO);
                 return Json(_responseDTO);
             } catch (Exception)
             {

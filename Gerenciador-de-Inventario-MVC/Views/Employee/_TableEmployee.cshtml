@@ -1,4 +1,5 @@
 ﻿@using Application.DTO
+@using Shared.Helper
 @model Application.DTO.EmployeeDTO
 
 @{
@@ -30,8 +31,14 @@
                 <td>@employee.Name</td>
                 <td>@employee.Function</td>
                 <td>@employee.Email</td>
-                <td>@employee.NamePermissionGroup</td>
-                <td>@employee.Status</td>
+                <td>@employee.permissionGroupDTO.Name</td>
+                <td class="status-user center-align">
+                    <span class="chip @ListStandard.ValidateActiveInativeColor(employee.Status)">
+                        <span class="text-white">
+                            @ListStandard.ValidateActiveInative(employee.Status)
+                        </span>
+                    </span>
+                </td>
                 <td>
                     <div class="dropdown">
                         <button class="gear-button">

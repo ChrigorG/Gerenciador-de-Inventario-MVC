@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Mappings;
 using Application.Services;
 using Data.Repositories;
 using Domain.Interfaces;
@@ -25,6 +26,13 @@ namespace InfrastructureIoC
             services.AddScoped<IPermissionGroupService, PermissionGroupService>();
 
             services.AddScoped<IViewRenderService, ViewRenderService>();
+            services.AddScoped<InitDbService>();
+
+            // Configuração do AutoMapper
+            // Configura o AutoMapper para registrar todos os perfis de mapeamento
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             return services;
         }

@@ -15,7 +15,7 @@ namespace Helper.Infra
             _compositeViewEngine = compositeViewEngine;
         }
 
-        public async Task<string> RenderToStringAsync(Controller controller, string viewName, object viewModel)
+        public string RenderToString(Controller controller, string viewName, object viewModel)
         {
             controller.ViewData.Model = viewModel;
 
@@ -37,7 +37,7 @@ namespace Helper.Infra
                     new HtmlHelperOptions()
                 );
 
-                await viewResult.View.RenderAsync(viewContext);
+                _ = viewResult.View.RenderAsync(viewContext);
                 return writer.GetStringBuilder().ToString();
             }
         }

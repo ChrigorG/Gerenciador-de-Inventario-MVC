@@ -4,6 +4,6 @@ namespace Shared.Helper.Services.Interface
 {
     public interface IViewRenderService
     {
-        Task<string> RenderToStringAsync(Controller controller, string viewName, object viewModel);
+        string RenderToString(Controller controller, string viewName, object viewModel);
     }
 }

@@ -12,7 +12,7 @@ async function OpenDetailStockMovements(idStockMovement) {
         type: "POST",
         data: { idStockMovement: idStockMovement },
         success: function (response) {
-            if (response.status) {
+            if (!response.statusErro) {
                 new Modal({
                     id: "detail-stock-movements-modal",
                     html: response.view
@@ -20,7 +20,7 @@ async function OpenDetailStockMovements(idStockMovement) {
             } else {
                 Swal.fire({
                     title: "Atenção",
-                    text: response.Message(),
+                    text: response.message,
                     icon: "warning"
                 });
             }

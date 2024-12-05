@@ -16,6 +16,9 @@
         public const string Close = "Fechar";
         public const string Save = "Gravar";
 
+        public const string Active = "Ativo";
+        public const string Inactive = "Inativo";
+
         // Sites 
         public const string SiteStatesIBGE = "https://servicodados.ibge.gov.br/api/v1/localidades/estados";
         public static string SiteCitiesIBGE(string Abbreviation)

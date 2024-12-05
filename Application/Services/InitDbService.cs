@@ -16,9 +16,9 @@ namespace Application.Services
             _permissionGroupRepository = permissionGroupRepository;
         }
 
-        public async Task InitDb()
+        public void InitDb()
         {
-            if (!await _permissionGroupRepository.Any())
+            if (!_permissionGroupRepository.Any())
             {
                 PermissionGroup permissionGroup = new PermissionGroup()
                 {
@@ -33,14 +33,14 @@ namespace Application.Services
                 };
                 _ = _permissionGroupRepository.Add(permissionGroup);
 
-                if (!await _employeeRepository.Any() && !Util.IsNullOrZero(permissionGroup.Id))
+                if (!_employeeRepository.Any())
                 {
                     Employee employee = new Employee()
                     {
                         Name = "Administrador",
                         Function = "Adm",
                         IdUserCreated = 0,
-                        IdPermissionGroup = permissionGroup.Id,
+                        IdPermissionGroup = 1,
                         Email = "chrigorcontato@gmail.com",
                         Password = Util.HashPassword("@dm2024"),
                         Status = true,

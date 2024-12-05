@@ -26,7 +26,7 @@ namespace Domain.Entities
 
         [Required]
         [Column("password")]
-        [StringLength(50)]
+        [StringLength(70)]
         public string Password { get; set; } = string.Empty;
 
         [Required]

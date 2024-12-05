@@ -11,7 +11,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/PermissionGroup/Form",
+            url: "/PermissionGroup/Save",
             data: $form.serializeArray(),
             success: function (response) {
                 if (!response.statusErro) {

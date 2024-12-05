@@ -20,16 +20,16 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<PermissionGroupDTO> GetPermissionGroup()
+        public PermissionGroupDTO GetPermissionGroup()
         {
             return new PermissionGroupDTO()
             {
                 Title = "Grupo de Permissão",
-                ListPermissionGroup = await GetList()
+                ListPermissionGroup = GetList()
             };
         }
 
-        public async Task<PermissionGroupDTO> FormPermissionGroup(int id)
+        public PermissionGroupDTO FormPermissionGroup(int id)
         {
             // Se o id for nullo ou zero será tratado como um novo Funcionario
             if (Util.IsNullOrZero(id))
@@ -41,7 +41,7 @@ namespace Application.Services
             }
 
             // A partir daqui seria somente para atualização do grupo de permissão
-            PermissionGroup? permissionGroup = await _permissionGroupRepository.Get(id);
+            PermissionGroup? permissionGroup = _permissionGroupRepository.Get(id);
             PermissionGroupDTO? permissionGroupDTO = _mapper.Map<PermissionGroupDTO?>(permissionGroup);
 
             if (permissionGroupDTO == null)
@@ -53,7 +53,7 @@ namespace Application.Services
             return permissionGroupDTO;
         }
 
-        public async Task<PermissionGroupDTO> SavePermissionGroup(PermissionGroupDTO permissionGroupDTO)
+        public PermissionGroupDTO SavePermissionGroup(PermissionGroupDTO permissionGroupDTO)
         {
             PermissionGroup? permissionGroup  = _mapper.Map<PermissionGroup>(permissionGroupDTO);
             var validationResults = ValidationEntities.Validate(permissionGroup);
@@ -72,14 +72,14 @@ namespace Application.Services
             // Adicionar um novo Grupo de Permissão
             if (Util.IsNullOrZero(permissionGroup.Id))
             {
-                permissionGroup = await _permissionGroupRepository.Add(permissionGroup);
+                permissionGroup = _permissionGroupRepository.Add(permissionGroup);
                 if (permissionGroup == null)
                 {
                     return InternalServerError($"salvar os dados do grupo de permissão {permissionGroup!.Name}");
                 }
             } else // Atualizar o Grupo de Permissão
             {
-                permissionGroup = await _permissionGroupRepository.Update(permissionGroup);
+                permissionGroup = _permissionGroupRepository.Update(permissionGroup);
                 if (permissionGroup == null)
                 {
                     return InternalServerError($"atualizar o grupo de permissão {permissionGroup!.Id} - {permissionGroup!.Name}");
@@ -87,33 +87,33 @@ namespace Application.Services
             }
 
             permissionGroupDTO = _mapper.Map<PermissionGroupDTO>(permissionGroup);
-            permissionGroupDTO.ListPermissionGroup = await GetList();
+            permissionGroupDTO.ListPermissionGroup = GetList();
             return permissionGroupDTO;
         }
 
-        public async Task<PermissionGroupDTO> DeletePermissionGroup(int id)
+        public PermissionGroupDTO DeletePermissionGroup(int id)
         {
-            PermissionGroup? permissionGroup = await _permissionGroupRepository.Get(id);
+            PermissionGroup? permissionGroup = _permissionGroupRepository.Get(id);
 
             if (permissionGroup == null)
             {
                 return NotFound();
             }
 
-            permissionGroup = await _permissionGroupRepository.Delete(permissionGroup);
+            permissionGroup = _permissionGroupRepository.Delete(permissionGroup);
             if (permissionGroup == null)
             {
                 return InternalServerError($"deletar o grupo de permissão {permissionGroup!.Id} - {permissionGroup!.Name}");
             }
 
             PermissionGroupDTO permissionGroupDTO = _mapper.Map<PermissionGroupDTO>(permissionGroup);
-            permissionGroupDTO.ListPermissionGroup = await GetList();
+            permissionGroupDTO.ListPermissionGroup = GetList();
             return permissionGroupDTO;
         }
 
-        private async Task<List<PermissionGroupDTO>> GetList()
+        private List<PermissionGroupDTO> GetList()
         {
-            List<PermissionGroup> permissionGroup = await _permissionGroupRepository.Get();
+            List<PermissionGroup> permissionGroup = _permissionGroupRepository.Get();
             return _mapper.Map<List<PermissionGroupDTO>>(permissionGroup);
         }
 

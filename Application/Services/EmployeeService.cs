@@ -4,31 +4,39 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using Shared.Helper;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Web.Helpers;
+using System.Xml.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace Application.Services
 {
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IPermissionGroupRepository _permissionGroupRepository;
         private readonly IMapper _mapper;
 
         public EmployeeService(IEmployeeRepository employeeRepository,
+            IPermissionGroupRepository permissionGroupRepository,
             IMapper mapper)
         {
             _employeeRepository = employeeRepository;
+            _permissionGroupRepository = permissionGroupRepository;
             _mapper = mapper;
         }
 
-        public async Task<EmployeeDTO> GetEmployee()
+        public EmployeeDTO GetEmployee()
         {
             return new EmployeeDTO()
             {
                 Title = "Funcionário",
-                ListEmployees = await GetList()
+                ListEmployees = GetList()
             };
         }
 
-        public async Task<EmployeeDTO> FormEmployee(int id)
+        public EmployeeDTO FormEmployee(int id)
         {
             // Se o id for nullo ou zero será tratado como um novo Funcionario
             if (Util.IsNullOrZero(id))
@@ -40,7 +48,7 @@ namespace Application.Services
             }
 
             // A partir daqui seria somente para atualização do funcionario
-            Employee? employee = await _employeeRepository.Get(id);
+            Employee? employee = _employeeRepository.Get(id);
             EmployeeDTO? employeeDTO = _mapper.Map<EmployeeDTO?>(employee);
 
             if (employeeDTO == null)
@@ -52,8 +60,15 @@ namespace Application.Services
             return employeeDTO;
         }
 
-        public async Task<EmployeeDTO> SaveEmploye(EmployeeDTO employeeDTO)
+        public EmployeeDTO SaveEmploye(EmployeeDTO employeeDTO)
         {
+            employeeDTO.ValidatedDTO();
+
+            if (employeeDTO.StatusErroMessage)
+            {
+                return employeeDTO;
+            }
+
             Employee? employee = _mapper.Map<Employee>(employeeDTO);
             var validationResults = ValidationEntities.Validate(employee);
 
@@ -71,14 +86,14 @@ namespace Application.Services
             // Adicionar um novo Funcionário
             if (Util.IsNullOrZero(employee.Id))
             {
-                employee = await _employeeRepository.Add(employee);
+                employee = _employeeRepository.Add(employee);
                 if (employee == null)
                 {
                     return InternalServerError($"salvar os dados do funcionário {employee!.Name}");
                 }
             } else // Atualizar o Funcionário
             {
-                employee = await _employeeRepository.Update(employee);
+                employee = _employeeRepository.Update(employee);
                 if (employee == null)
                 {
                     return InternalServerError($"atualizar o funcionário {employee!.Id} - {employee!.Name}");
@@ -86,34 +101,55 @@ namespace Application.Services
             }
 
             employeeDTO = _mapper.Map<EmployeeDTO>(employee);
-            employeeDTO.ListEmployees = await GetList();
+            employeeDTO.ListEmployees = GetList();
             return employeeDTO;
         }
 
-        public async Task<EmployeeDTO> DeleteEmploye(int id)
+        public EmployeeDTO DeleteEmploye(int id)
         {
-            Employee? employee = await _employeeRepository.Get(id);
+            Employee? employee = _employeeRepository.Get(id);
 
             if (employee == null)
             {
                 return NotFound();
             }
 
-            employee = await _employeeRepository.Delete(employee);
+            employee = _employeeRepository.Delete(employee);
             if (employee == null)
             {
                 return InternalServerError($"deletar o funcionário {employee!.Id} - {employee!.Name}");
             }
 
             EmployeeDTO employeeDTO = _mapper.Map<EmployeeDTO>(employee);
-            employeeDTO.ListEmployees = await GetList();
+            employeeDTO.ListEmployees = GetList();
             return employeeDTO;
         }
 
-        private async Task<List<EmployeeDTO>> GetList()
+        private List<EmployeeDTO> GetList()
         {
-            List<Employee> employees = await _employeeRepository.Get();
-            return _mapper.Map<List<EmployeeDTO>>(employees);
+            List<Employee> employees = _employeeRepository.Get();
+            List<EmployeeDTO> employeeDTOs = _mapper.Map<List<EmployeeDTO>>(employees);
+
+            List<PermissionGroup> permissionGroups = _permissionGroupRepository.Get();
+
+            employeeDTOs = (from employee in employeeDTOs
+                            join permissionGroup in permissionGroups on employee.IdPermissionGroup equals permissionGroup.Id
+                            select new EmployeeDTO
+                            {
+                                Id = employee.Id,
+                                StatusDeleted = employee.StatusDeleted,
+                                IdUserCreated = employee.IdUserCreated,
+                                DatetimeCreate = employee.DatetimeCreate,
+                                IdUserUpdated = employee.IdUserUpdated,
+                                DatetimeUpdated = employee.DatetimeUpdated,
+                                IdPermissionGroup = employee.IdPermissionGroup,
+                                Name = employee.Name,
+                                Function = employee.Function,
+                                Email = employee.Email,
+                                Status = employee.Status,
+                                permissionGroupDTO = _mapper.Map<PermissionGroupDTO>(permissionGroup)
+                            }).ToList();
+            return employeeDTOs;
         }
 
         private EmployeeDTO NotFound()

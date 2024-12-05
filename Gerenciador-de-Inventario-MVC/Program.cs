@@ -2,14 +2,20 @@ using Application.Services;
 using Data.Context;
 using InfrastructureIoC;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configurando o DbContext com Banco de Dados
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("Data"));
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Adicionar serviços ao contêiner
+// Adicionar serviços ao contêiner (Injeção de Dependência)
 builder.Services.AddInfrastructureIoC();
 
 var app = builder.Build();
@@ -42,7 +48,7 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.Migrate();
 
     var initDbService = serviceProvider.GetRequiredService<InitDbService>();
-    await initDbService.InitDb();
+    initDbService.InitDb();
 }
 
 app.Run();

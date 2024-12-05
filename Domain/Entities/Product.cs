@@ -16,7 +16,7 @@ namespace Domain.Entities
         public string Description { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "O preço é obrigatório")]
-        [Column("price")]
+        [Column("price", TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
         [Required(ErrorMessage = "A quantidade é obrigatório")]

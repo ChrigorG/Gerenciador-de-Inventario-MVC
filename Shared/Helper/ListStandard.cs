@@ -6,29 +6,22 @@ namespace Shared.Helper
     {
         //**************************************** Validation List ****************************************//
 
-        public static string ValidateActiveInative(string value)
+        public static string ValidateActiveInative(bool value)
         {
-            return value == Constants.Active ? "Ativo" : "Inativo";
+            return value ? Constants.Active : Constants.Inactive;
         }
 
-        public static string ValidateActiveInativeColor(string value)
+        public static string ValidateActiveInativeColor(bool value)
         {
-            return value == Constants.Active ? "green lighten-5" : "red lighten-5";
+            return value ? "bg-success" : "bg-danger";
         }
-
-        public static string ValidateActiveInativeTextColor(string value)
-        {
-            return value == Constants.Active ? "green-text" : "red-text";
-        }
-
-        //**************************************** List ****************************************//
 
         public static IEnumerable<SelectListItem> GetListActiveOrInative()
         {
             List<SelectListItem> list = new List<SelectListItem>()
             {
-                new SelectListItem { Text = Constants.TextActive, Value = Constants.Active },
-                new SelectListItem { Text = Constants.TextInative, Value = Constants.Inative }
+                new SelectListItem { Text = Constants.Active, Value = "1" },
+                new SelectListItem { Text = Constants.Inactive, Value = "0" }
             };
 
             return list;

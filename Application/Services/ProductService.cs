@@ -19,16 +19,16 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ProductDTO> GetProduct()
+        public ProductDTO GetProduct()
         {
             return new ProductDTO()
             {
                 Title = "Produtos",
-                ListProducts = await GetList()
+                ListProducts = GetList()
             };
         }
 
-        public async Task<ProductDTO> FormProduct(int id)
+        public ProductDTO FormProduct(int id)
         {
             // Se o id for nullo ou zero será tratado como um novo produto
             if (Util.IsNullOrZero(id))
@@ -40,7 +40,7 @@ namespace Application.Services
             } 
 
             // A partir daqui seria somente para atualização do produto
-            Product? products = await _productRepository.Get(id);
+            Product? products = _productRepository.Get(id);
             ProductDTO? productsDTO = _mapper.Map<ProductDTO?>(products);
 
             if (productsDTO == null)
@@ -52,7 +52,7 @@ namespace Application.Services
             return productsDTO;
         }
 
-        public async Task<ProductDTO> SaveProduct(ProductDTO productDTO)
+        public ProductDTO SaveProduct(ProductDTO productDTO)
         {
             Product? product = _mapper.Map<Product>(productDTO);
             var validationResults = ValidationEntities.Validate(product);
@@ -71,14 +71,14 @@ namespace Application.Services
             // Adicionar um novo Produto
             if (Util.IsNullOrZero(product.Id))
             {
-                product = await _productRepository.Add(product);
+                product = _productRepository.Add(product);
                 if (product == null)
                 {
                     return InternalServerError($"salvar os dados do produto {product!.Name}");
                 }
             } else // Atualizar o produto
             {
-                product = await _productRepository.Update(product);
+                product = _productRepository.Update(product);
                 if (product == null)
                 {
                     return InternalServerError($"atualizar o produto {product!.Id} - {product!.Name}");
@@ -86,33 +86,33 @@ namespace Application.Services
             }
 
             productDTO = _mapper.Map<ProductDTO>(product);
-            productDTO.ListProducts = await GetList();
+            productDTO.ListProducts = GetList();
             return productDTO;
         }
 
-        public async Task<ProductDTO> DeleteProduct(int id)
+        public ProductDTO DeleteProduct(int id)
         {
-            Product? product = await _productRepository.Get(id);
+            Product? product = _productRepository.Get(id);
 
             if (product == null){
                 return NotFound();
             }
 
-            product = await _productRepository.Delete(product);
+            product = _productRepository.Delete(product);
             if (product == null)
             {
                 return InternalServerError($"deletar o produto {product!.Id} - {product!.Name}");
             }
 
             ProductDTO productDTO = _mapper.Map<ProductDTO>(product);
-            productDTO.ListProducts = await GetList();
+            productDTO.ListProducts = GetList();
             productDTO.Message = $"Produto {product.Id} - {product.Name} deletado com sucesso!";
             return productDTO;
         }
 
-        private async Task<List<ProductDTO>> GetList()
+        private List<ProductDTO> GetList()
         {
-            List<Product> products = await _productRepository.Get();
+            List<Product> products = _productRepository.Get();
             return _mapper.Map<List<ProductDTO>>(products);
         }
 

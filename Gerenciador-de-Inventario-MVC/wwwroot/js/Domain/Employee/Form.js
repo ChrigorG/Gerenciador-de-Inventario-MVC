@@ -8,12 +8,15 @@
     $form.on("submit", async (event) => {
         // Impede o envio padrão do formulário
         event.preventDefault();
+        debugger;
 
         $.ajax({
+
             type: "POST",
-            url: "/Employee/Form",
+            url: "/Employee/Save",
             data: $form.serializeArray(),
             success: function (response) {
+                debugger;
                 if (!response.statusErro) {
                     $("#idDivEmployeeTable").html(response.view);
                     $("#form-employee-modal #closeEmployeeForm").click();
@@ -24,11 +27,18 @@
                         icon: "success"
                     });
                 } else {
-                    Swal.fire({
-                        title: "Atenção",
-                        text: response.message,
-                        icon: "warning"
-                    });
+                    if (response.view) {
+                        new Modal({
+                            id: "form-employee-modal",
+                            html: response.view
+                        }).Create();
+                    } else {
+                        Swal.fire({
+                            title: "Atenção",
+                            text: response.message,
+                            icon: "warning"
+                        });
+                    }
                 }
             },
             error: function (xhr, status, error) {

@@ -28,7 +28,7 @@ async function OpenDetailProduct(id) {
         type: "POST",
         data: { id: id },
         success: function (response) {
-            if (response.status) {
+            if (!response.statusErro) {
                 new Modal({
                     id: "detail-product-modal",
                     html: response.view
@@ -36,7 +36,7 @@ async function OpenDetailProduct(id) {
             } else {
                 Swal.fire({
                     title: "Atenção",
-                    text: response.Message(),
+                    text: response.message,
                     icon: "warning"
                 });
             }

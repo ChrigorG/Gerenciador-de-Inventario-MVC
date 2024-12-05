@@ -4,12 +4,12 @@ namespace Application.Interfaces
 {
     public interface IProductService
     {
-        Task<ProductDTO> GetProduct();
-
-        Task<ProductDTO> FormProduct(int id);
-
-        Task<ProductDTO> SaveProduct(ProductDTO productDTO);
-
-        Task<ProductDTO> DeleteProduct(int id);
+        ProductDTO GetProduct();
+                  
+        ProductDTO FormProduct(int id);
+                  
+        ProductDTO SaveProduct(ProductDTO productDTO);
+                  
+        ProductDTO DeleteProduct(int id);
     }
 }

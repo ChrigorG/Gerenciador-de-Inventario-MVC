@@ -1,7 +1,10 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+using System.Web.Helpers;
+
 namespace Application.DTO
 {
-    public class BaseDTO
+    public abstract class BaseDTO
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
@@ -14,5 +17,26 @@ namespace Application.DTO
         public int? IdUserUpdated { get; set; }
         public string NameUserUpdated { get; set; } = string.Empty;
         public DateTime? DatetimeUpdated { get; set; }
+
+        protected List<ValidationResult> GetValidationErrors<T>(T obj) where T : BaseDTO
+        {
+            var results = new List<ValidationResult>();
+            var context = new ValidationContext(obj, serviceProvider: null, items: null);
+            Validator.TryValidateObject(obj, context, results, validateAllProperties: true);
+            return results;
+        }
+
+        protected T Validate<T>(T obj) where T : BaseDTO
+        {
+            var errors = GetValidationErrors(obj);
+
+            if (errors.Count > 0)
+            {
+                obj.StatusErroMessage = true;
+                obj.Message += string.Join(";\n", errors.Select(vr => vr.ErrorMessage));
+            }
+
+            return obj;
+        }
     }
 }

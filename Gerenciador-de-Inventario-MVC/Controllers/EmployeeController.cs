@@ -19,11 +19,11 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             _responseDTO = new ResponseDTO();
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             try
             {
-                EmployeeDTO employeeDTO = await _employeeService.GetEmployee();
+                EmployeeDTO employeeDTO = _employeeService.GetEmployee();
                 return View(employeeDTO);
             } catch (Exception)
             {
@@ -31,12 +31,12 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             }
         }
 
-        public async Task<IActionResult> Form(int id)
+        public IActionResult Form(int id)
         {
             try
             {
-                EmployeeDTO employeeDTO = await _employeeService.FormEmployee(id);
-                _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_Form", employeeDTO);
+                EmployeeDTO employeeDTO = _employeeService.FormEmployee(id);
+                _responseDTO.View = _viewRenderService.RenderToString(this, "_Form", employeeDTO);
                 return Json(_responseDTO);
             } catch (Exception)
             {
@@ -46,18 +46,11 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             }
         }
 
-        public async Task<IActionResult> Save(EmployeeDTO employeeDTO)
+        public IActionResult Save(EmployeeDTO employeeDTO)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    _responseDTO.StatusErro = true;
-                    _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_Form", employeeDTO);
-                    return Json(_responseDTO);
-                }
-
-                employeeDTO = await _employeeService.SaveEmploye(employeeDTO);
+                employeeDTO = _employeeService.SaveEmploye(employeeDTO);
                 if (employeeDTO.StatusErroMessage)
                 {
                     _responseDTO.StatusErro = true;
@@ -65,7 +58,7 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
                     return Json(_responseDTO);
                 }
 
-                _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_TableEmployee", employeeDTO);
+                _responseDTO.View = _viewRenderService.RenderToString(this, "_TableEmployee", employeeDTO);
                 return Json(_responseDTO);
             } catch (Exception)
             {
@@ -75,12 +68,12 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             }
         }
 
-        public async Task<IActionResult> Detail(int id)
+        public IActionResult Detail(int id)
         {
             try
             {
-                EmployeeDTO employeeDTO = await _employeeService.FormEmployee(id);
-                _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_Detail", employeeDTO);
+                EmployeeDTO employeeDTO = _employeeService.FormEmployee(id);
+                _responseDTO.View = _viewRenderService.RenderToString(this, "_Detail", employeeDTO);
                 return Json(_responseDTO);
             } catch (Exception)
             {
@@ -90,11 +83,11 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             }
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
             try
             {
-                EmployeeDTO employeeDTO = await _employeeService.DeleteEmploye(id);
+                EmployeeDTO employeeDTO = _employeeService.DeleteEmploye(id);
                 if (employeeDTO.StatusErroMessage)
                 {
                     _responseDTO.StatusErro = true;
@@ -102,7 +95,7 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
                     return Json(_responseDTO);
                 }
 
-                _responseDTO.View = await _viewRenderService.RenderToStringAsync(this, "_TableEmployee", employeeDTO);
+                _responseDTO.View = _viewRenderService.RenderToString(this, "_TableEmployee", employeeDTO);
                 return Json(_responseDTO);
             } catch (Exception)
             {
