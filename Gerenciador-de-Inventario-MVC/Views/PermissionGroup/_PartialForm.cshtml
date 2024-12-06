@@ -1,0 +1,22 @@
+﻿@using Shared.Helper
+@model Application.DTO.PermissionGroupDTO
+
+@{
+    this.Layout = null;
+}
+
+<!-- Form -->
+<form id="permissionGroupForm">
+    <div class="form-group">
+        <label for="id">Id</label>
+        <input type="number" class="form-control" asp-for="Id" disabled />
+    </div>
+    <div class="form-group">
+        <label for="name">Nome</label>
+        <input type="text" class="form-control" asp-for="Name" required />
+    </div>
+    <div class="form-group">
+        <label for="description">Descrição</label>
+        <input type="text" class="form-control" asp-for="Description" required />
+    </div>
+</form>

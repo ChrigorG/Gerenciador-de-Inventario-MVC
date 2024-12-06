@@ -15,5 +15,7 @@ namespace Application.DTO
         public string Description { get; set; } = string.Empty;
         public Product Product { get; set; } = new Product();
         public List<StockMovementsDTO> ListStockMovements { get; set; } = new List<StockMovementsDTO>();
+
+        public void ValidatedDTO() => Validate(this);
     }
 }

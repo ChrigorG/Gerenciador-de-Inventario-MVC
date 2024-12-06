@@ -19,10 +19,6 @@ namespace Domain.Entities
         [Column("price", TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "A quantidade é obrigatório")]
-        [Column("quantity")]
-        public int Quantity { get; set; }
-
         [Required(ErrorMessage = "O status é obrigatório")]
         [Column("status")]
         public bool Status { get; set; } = true; // Ativa e desativa um produto ao inves de deletar

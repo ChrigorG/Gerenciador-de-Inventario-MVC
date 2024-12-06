@@ -1,25 +1,25 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
-  background-color: aliceblue;
+    margin-bottom: 60px;
+    background-color: aliceblue;
 }
 
 html, body {
@@ -46,8 +46,11 @@ footer {
     vertical-align: middle;
 }
 
-/*  Tabela com engrenagem  */
+.dataTables_wrapper{
+    margin-bottom: 50px;
+}
 
+/*  Tabela com engrenagem  */
 .gear-button {
     background: none;
     border: none;
@@ -55,39 +58,42 @@ footer {
     cursor: pointer;
 }
 
-.dropdown {
+.dropdown-table {
     position: relative;
     display: inline-block;
 }
 
-.dropdown-menu {
+.dropdown-table-menu {
     display: none;
+    left: -350%;
+    min-width: 130px;
+    top: 0;
+    border-radius: 10px;
     position: absolute;
     background-color: #f9f9f9;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    z-index: 1000;
     list-style: none;
     padding: 8px 0;
     margin: 0;
 }
 
-.dropdown-menu li {
+.dropdown-table-menu li {
     padding: 8px 16px;
 }
 
-.dropdown-menu li a {
+.dropdown-table-menu li a {
     text-decoration: none;
     color: #333;
 }
 
-.dropdown-menu li:hover {
+.dropdown-table-menu li:hover {
     background-color: #ddd;
 }
 
-.dropdown:hover .dropdown-menu {
-    display: block;
+.dropdown-table-menu.show {
+    display: block; /* Mostra o menu */
 }
-
 
 /*******************/
 
@@ -105,13 +111,13 @@ footer {
     margin-right: 5px;
 }
 
-.chip > img {
-    float: left;
-    margin: 0 8px 0 -12px;
-    height: 32px;
-    width: 32px;
-    border-radius: 50%;
-}
+    .chip > img {
+        float: left;
+        margin: 0 8px 0 -12px;
+        height: 32px;
+        width: 32px;
+        border-radius: 50%;
+    }
 
 /********** Modal */
 

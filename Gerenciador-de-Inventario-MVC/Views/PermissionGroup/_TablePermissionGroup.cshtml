@@ -5,7 +5,7 @@
     this.Layout = null;
 }
 
-<table id="permissionGroupTable" class="table table-bordered table-striped table-hover">
+<table id="permissionGroupTable" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th scope="col">
@@ -28,15 +28,29 @@
                 <td>@permissionGroupDTO.Name</td>
                 <td>@permissionGroupDTO.Description</td>
                 <td>
-                    <div class="dropdown">
-                        <button class="gear-button">
+                    <div class="dropdown-table">
+                        <button class="gear-button" onclick="toggleDropdownMenu(event)">
                             <span class="material-symbols-outlined">
                                 settings
                             </span>
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a onclick="OpenFormPermissionGroup(@permissionGroupDTO.Id)">Editar</a></li>
-                            <li><a onclick="OpenDetailPermissionGroup(@permissionGroupDTO.Id)">Detalhar</a></li>
+                        <ul class="dropdown-table-menu">
+                            <li>
+                                <a class="d-flex align-items-center" onclick="OpenFormPermissionGroup(@permissionGroupDTO.Id)">
+                                    <span class="material-symbols-outlined fs-5 me-2">
+                                        edit
+                                    </span>
+                                    Editar
+                                </a>
+                            </li>
+                            <li>
+                                <a class="d-flex align-items-center" onclick="OpenDetailPermissionGroup(@permissionGroupDTO.Id)">
+                                    <span class="material-symbols-outlined fs-5 me-2">
+                                        info
+                                    </span>
+                                    Detalhar
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </td>

@@ -14,22 +14,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <!-- Form -->
-                <form id="permissionGroupForm">
-                    <div class="form-group">
-                        <label for="id">Id</label>
-                        <input type="number" class="form-control" asp-for="Id" disabled />
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Nome</label>
-                        <input type="text" class="form-control" asp-for="Name" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Descrição</label>
-                        <input type="text" class="form-control" asp-for="Description" required />
-                    </div>
-                </form>
+            <div class="modal-body" id="idModalBodyFormPermissionGroup">
+                <partial name="_PartialForm" model="Model" />
             </div>
 
             <div class="modal-footer">

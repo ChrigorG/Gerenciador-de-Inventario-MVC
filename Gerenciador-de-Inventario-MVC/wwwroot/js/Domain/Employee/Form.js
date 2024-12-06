@@ -11,13 +11,12 @@
         debugger;
 
         $.ajax({
-
             type: "POST",
             url: "/Employee/Save",
             data: $form.serializeArray(),
             success: function (response) {
-                debugger;
                 if (!response.statusErro) {
+                    // Tudo certo, atualizando a tabela e fechando a modal
                     $("#idDivEmployeeTable").html(response.view);
                     $("#form-employee-modal #closeEmployeeForm").click();
 
@@ -27,18 +26,15 @@
                         icon: "success"
                     });
                 } else {
-                    if (response.view) {
-                        new Modal({
-                            id: "form-employee-modal",
-                            html: response.view
-                        }).Create();
-                    } else {
-                        Swal.fire({
-                            title: "Atenção",
-                            text: response.message,
-                            icon: "warning"
-                        });
-                    }
+                    if (response.view) 
+                        $("#form-employee-modal #idModalBodyFormEmployee").html(response.view); // Atualizo a <div> com as mensagens os dados que foram invalidado no servidor
+                    
+                    // Mensagem de Erro
+                    Swal.fire({
+                        title: "Atenção",
+                        text: response.message,
+                        icon: "warning"
+                    });
                 }
             },
             error: function (xhr, status, error) {

@@ -15,6 +15,7 @@
             data: $form.serializeArray(),
             success: function (response) {
                 if (!response.statusErro) {
+                    // Tudo certo, atualizando a tabela e fechando a modal
                     $("#idDivTableProduct").html(response.view);
                     $("#form-product-modal #closeProductForm").click();
 
@@ -24,18 +25,15 @@
                         icon: "success"
                     });
                 } else {
-                    if (true) {
-                        new Modal({
-                            id: "form-product-modal",
-                            html: response.view
-                        }).Create();
-                    } else {
-                        Swal.fire({
-                            title: "Atenção",
-                            text: response.message,
-                            icon: "warning"
-                        });
-                    }
+                    if (response.view)
+                        $("#form-product-modal #idModalBodyFormProduct").html(response.view); // Atualizo a <div> com as mensagens os dados que foram invalidado no servidor
+
+                    // Mensagem de Erro
+                    Swal.fire({
+                        title: "Atenção",
+                        text: response.message,
+                        icon: "warning"
+                    });
                 }
             },
             error: function (xhr, status, error) {

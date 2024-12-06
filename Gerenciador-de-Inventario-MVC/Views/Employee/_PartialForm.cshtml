@@ -1,0 +1,44 @@
+﻿@using Shared.Helper
+@model Application.DTO.EmployeeDTO
+
+@{
+    this.Layout = null;
+}
+
+
+<!-- Form -->
+<form id="employeeForm">
+    <div class="row">
+        <div class="form-group col-md-2">
+            <label asp-for="Id">Id</label>
+            <input type="number" class="form-control" asp-for="Id" disabled />
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="Name">Nome</label>
+            <input type="text" class="form-control" asp-for="Name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="Email">Email</label>
+            <input type="email" class="form-control" asp-for="Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-2">
+            <label asp-for="Password">Senha</label>
+            <input type="password" class="form-control" name="Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-8">
+            <label asp-for="Function">Função/Cargo</label>
+            <input type="text" class="form-control" asp-for="Function" />
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="Status">Situação</label>
+            <select asp-for="Status" class="form-select"
+                    asp-items="@(new SelectList(ListStandard.GetListActiveOrInative(), "Value", "Text", Model.Status))">
+            </select>
+        </div>
+    </div>
+</form>

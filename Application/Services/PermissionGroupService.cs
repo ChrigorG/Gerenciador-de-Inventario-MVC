@@ -46,7 +46,7 @@ namespace Application.Services
 
             if (permissionGroupDTO == null)
             {
-                return NotFound();
+                return NotFound(new PermissionGroupDTO());
             }
 
             permissionGroupDTO.Title = $"Atualizar os dados do grupo de permissão {permissionGroupDTO.Id} - {permissionGroupDTO.Name}";
@@ -55,34 +55,35 @@ namespace Application.Services
 
         public PermissionGroupDTO SavePermissionGroup(PermissionGroupDTO permissionGroupDTO)
         {
-            PermissionGroup? permissionGroup  = _mapper.Map<PermissionGroup>(permissionGroupDTO);
-            var validationResults = ValidationEntities.Validate(permissionGroup);
-
-            if (validationResults.Count > 0)
+            permissionGroupDTO.ValidatedDTO();
+            if (permissionGroupDTO.StatusErroMessage)
             {
-                foreach (var error in validationResults)
-                {
-                    permissionGroupDTO.Message += $"{error.ErrorMessage}\n";
-                }
-
-                permissionGroupDTO.StatusErroMessage = true;
                 return permissionGroupDTO;
             }
 
-            // Adicionar um novo Grupo de Permissão
-            if (Util.IsNullOrZero(permissionGroup.Id))
+            PermissionGroup? permissionGroup;
+            // Adicionar um novo Funcionário
+            if (Util.IsNullOrZero(permissionGroupDTO.Id))
             {
+                permissionGroup = _mapper.Map<PermissionGroup>(permissionGroupDTO);
                 permissionGroup = _permissionGroupRepository.Add(permissionGroup);
                 if (permissionGroup == null)
                 {
-                    return InternalServerError($"salvar os dados do grupo de permissão {permissionGroup!.Name}");
+                    return InternalServerError(permissionGroupDTO, $"salvar os dados do funcionário {permissionGroup!.Name}");
                 }
-            } else // Atualizar o Grupo de Permissão
+            } else // Atualizar o Funcionário
             {
+                permissionGroup = _permissionGroupRepository.Get(permissionGroupDTO.Id);
+                if (permissionGroup == null)
+                {
+                    return NotFound(permissionGroupDTO);
+                }
+
+                permissionGroup = ConvertDtoToModel(permissionGroup, permissionGroupDTO);
                 permissionGroup = _permissionGroupRepository.Update(permissionGroup);
                 if (permissionGroup == null)
                 {
-                    return InternalServerError($"atualizar o grupo de permissão {permissionGroup!.Id} - {permissionGroup!.Name}");
+                    return InternalServerError(permissionGroupDTO, $"atualizar o funcionário {permissionGroup!.Id} - {permissionGroup!.Name}");
                 }
             }
 
@@ -97,13 +98,13 @@ namespace Application.Services
 
             if (permissionGroup == null)
             {
-                return NotFound();
+                return NotFound(new PermissionGroupDTO());
             }
 
             permissionGroup = _permissionGroupRepository.Delete(permissionGroup);
             if (permissionGroup == null)
             {
-                return InternalServerError($"deletar o grupo de permissão {permissionGroup!.Id} - {permissionGroup!.Name}");
+                return InternalServerError(new PermissionGroupDTO(), $"deletar o grupo de permissão {permissionGroup!.Id} - {permissionGroup!.Name}");
             }
 
             PermissionGroupDTO permissionGroupDTO = _mapper.Map<PermissionGroupDTO>(permissionGroup);
@@ -117,22 +118,32 @@ namespace Application.Services
             return _mapper.Map<List<PermissionGroupDTO>>(permissionGroup);
         }
 
-        private PermissionGroupDTO NotFound()
+        private PermissionGroup ConvertDtoToModel(PermissionGroup permissionGroup, PermissionGroupDTO permissionGroupDTO)
         {
-            return new PermissionGroupDTO()
-            {
-                StatusErroMessage = true,
-                Message = "Nenhum Grupo de Permissão encontrado!"
-            };
+            permissionGroup.ActionPermissionGroup = permissionGroupDTO.ActionPermissionGroup;
+            permissionGroup.ActionStockMovements = permissionGroupDTO.ActionStockMovements;
+            permissionGroup.ActionEmployee = permissionGroupDTO.ActionEmployee;
+            permissionGroup.ActionProduct = permissionGroupDTO.ActionProduct;
+            permissionGroup.Description = permissionGroupDTO.Description;
+            permissionGroup.Status = permissionGroupDTO.Status;
+            permissionGroup.Name = permissionGroupDTO.Name;
+
+            return permissionGroup;
         }
 
-        private PermissionGroupDTO InternalServerError(string complementMessage)
+        private PermissionGroupDTO NotFound(PermissionGroupDTO permissionGroupDTO)
         {
-            return new PermissionGroupDTO()
-            {
-                StatusErroMessage = true,
-                Message = $"Ops, não conseguimos {complementMessage}, tente mais tarde!"
-            };
+            permissionGroupDTO.StatusErroMessage = true;
+            permissionGroupDTO.Message = "Nenhum Grupo de Permissão encontrado!";
+            return permissionGroupDTO;
+        }
+
+        private PermissionGroupDTO InternalServerError(PermissionGroupDTO permissionGroupDTO, string complementMessage)
+        {
+
+            permissionGroupDTO.StatusErroMessage = true;
+            permissionGroupDTO.Message = $"Ops, não conseguimos {complementMessage}, tente mais tarde!";
+            return permissionGroupDTO;
         }
     }
 }

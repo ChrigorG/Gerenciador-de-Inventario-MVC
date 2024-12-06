@@ -37,7 +37,7 @@ namespace Application.Services
                 productDTO.Title = "Adicionar um Produto";
                 return productDTO;
 
-            } 
+            }
 
             // A partir daqui seria somente para atualização do produto
             Product? products = _productRepository.Get(id);
@@ -45,7 +45,7 @@ namespace Application.Services
 
             if (productsDTO == null)
             {
-                return NotFound();
+                return NotFound(new ProductDTO());
             }
 
             productsDTO.Title = $"Atualizar os dados do produto {productsDTO.Id} - {productsDTO.Name}";
@@ -54,34 +54,35 @@ namespace Application.Services
 
         public ProductDTO SaveProduct(ProductDTO productDTO)
         {
-            Product? product = _mapper.Map<Product>(productDTO);
-            var validationResults = ValidationEntities.Validate(product);
-
-            if (validationResults.Count > 0)
+            productDTO.ValidatedDTO();
+            if (productDTO.StatusErroMessage)
             {
-                foreach (var error in validationResults)
-                {
-                    productDTO.Message += $"{error.ErrorMessage}\n";
-                }
-
-                productDTO.StatusErroMessage = false;
                 return productDTO;
             }
 
-            // Adicionar um novo Produto
-            if (Util.IsNullOrZero(product.Id))
+            Product? product;
+            // Adicionar um novo Funcionário
+            if (Util.IsNullOrZero(productDTO.Id))
             {
+                product = _mapper.Map<Product>(productDTO);
                 product = _productRepository.Add(product);
                 if (product == null)
                 {
-                    return InternalServerError($"salvar os dados do produto {product!.Name}");
+                    return InternalServerError(productDTO, $"salvar os dados do funcionário {product!.Name}");
                 }
-            } else // Atualizar o produto
+            } else // Atualizar o Funcionário
             {
+                product = _productRepository.Get(productDTO.Id);
+                if (product == null)
+                {
+                    return NotFound(productDTO);
+                }
+
+                product = ConvertDtoToModel(product, productDTO);
                 product = _productRepository.Update(product);
                 if (product == null)
                 {
-                    return InternalServerError($"atualizar o produto {product!.Id} - {product!.Name}");
+                    return InternalServerError(productDTO, $"atualizar o funcionário {product!.Id} - {product!.Name}");
                 }
             }
 
@@ -94,14 +95,15 @@ namespace Application.Services
         {
             Product? product = _productRepository.Get(id);
 
-            if (product == null){
-                return NotFound();
+            if (product == null)
+            {
+                return NotFound(new ProductDTO());
             }
 
             product = _productRepository.Delete(product);
             if (product == null)
             {
-                return InternalServerError($"deletar o produto {product!.Id} - {product!.Name}");
+                return InternalServerError(new ProductDTO(), $"deletar o produto {product!.Id} - {product!.Name}");
             }
 
             ProductDTO productDTO = _mapper.Map<ProductDTO>(product);
@@ -116,22 +118,29 @@ namespace Application.Services
             return _mapper.Map<List<ProductDTO>>(products);
         }
 
-        private ProductDTO NotFound()
+        private Product ConvertDtoToModel(Product product, ProductDTO productDTO)
         {
-            return new ProductDTO()
-            {
-                StatusErroMessage = true,
-                Message = "Nenhum produto encontrado!"
-            };
+            product.Description = productDTO.Description;
+            product.UnitType = productDTO.UnitType;
+            product.Status = productDTO.Status;
+            product.Price = productDTO.Price;
+            product.Name = productDTO.Name;
+           
+            return product;
         }
 
-        private ProductDTO InternalServerError(string complementMessage)
+        private ProductDTO NotFound(ProductDTO productDTO)
         {
-            return new ProductDTO()
-            {
-                StatusErroMessage = true,
-                Message = $"Ops, não conseguimos {complementMessage}, tente mais tarde!"
-            };
+            productDTO.StatusErroMessage = true;
+            productDTO.Message = "Nenhum produto encontrado!";
+            return productDTO;
+        }
+
+        private ProductDTO InternalServerError(ProductDTO productDTO, string complementMessage)
+        {
+            productDTO.StatusErroMessage = true;
+            productDTO.Message = $"Ops, não conseguimos {complementMessage}, tente mais tarde!";
+            return productDTO;
         }
     }
 }

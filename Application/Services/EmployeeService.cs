@@ -53,7 +53,7 @@ namespace Application.Services
 
             if (employeeDTO == null)
             {
-                return NotFound();
+                return NotFound(new EmployeeDTO());
             }
 
             employeeDTO.Title = $"Atualizar os dados do funcionário {employeeDTO.Id} - {employeeDTO.Name}";
@@ -63,40 +63,34 @@ namespace Application.Services
         public EmployeeDTO SaveEmploye(EmployeeDTO employeeDTO)
         {
             employeeDTO.ValidatedDTO();
-
             if (employeeDTO.StatusErroMessage)
             {
                 return employeeDTO;
             }
 
-            Employee? employee = _mapper.Map<Employee>(employeeDTO);
-            var validationResults = ValidationEntities.Validate(employee);
-
-            if (validationResults.Count > 0)
-            {
-                foreach (var error in validationResults)
-                {
-                    employeeDTO.Message += $"{error.ErrorMessage}\n";
-                }
-
-                employeeDTO.StatusErroMessage = false;
-                return employeeDTO;
-            }
-
+            Employee? employee;
             // Adicionar um novo Funcionário
-            if (Util.IsNullOrZero(employee.Id))
+            if (Util.IsNullOrZero(employeeDTO.Id))
             {
+                employee = _mapper.Map<Employee>(employeeDTO);
                 employee = _employeeRepository.Add(employee);
                 if (employee == null)
                 {
-                    return InternalServerError($"salvar os dados do funcionário {employee!.Name}");
+                    return InternalServerError(employeeDTO, $"salvar os dados do funcionário {employee!.Name}");
                 }
             } else // Atualizar o Funcionário
             {
+                employee = _employeeRepository.Get(employeeDTO.Id);
+                if (employee == null)
+                {
+                    return NotFound(employeeDTO);
+                }
+
+                employee = ConvertDtoToModel(employee, employeeDTO);
                 employee = _employeeRepository.Update(employee);
                 if (employee == null)
                 {
-                    return InternalServerError($"atualizar o funcionário {employee!.Id} - {employee!.Name}");
+                    return InternalServerError(employeeDTO, $"atualizar o funcionário {employee!.Id} - {employee!.Name}");
                 }
             }
 
@@ -111,13 +105,13 @@ namespace Application.Services
 
             if (employee == null)
             {
-                return NotFound();
+                return NotFound(new EmployeeDTO());
             }
 
             employee = _employeeRepository.Delete(employee);
             if (employee == null)
             {
-                return InternalServerError($"deletar o funcionário {employee!.Id} - {employee!.Name}");
+                return InternalServerError(new EmployeeDTO(), $"deletar o funcionário {employee!.Id} - {employee!.Name}");
             }
 
             EmployeeDTO employeeDTO = _mapper.Map<EmployeeDTO>(employee);
@@ -152,23 +146,29 @@ namespace Application.Services
             return employeeDTOs;
         }
 
-        private EmployeeDTO NotFound()
+        private Employee ConvertDtoToModel(Employee employee, EmployeeDTO employeeDTO)
         {
-            return new EmployeeDTO()
-            {
-                StatusErroMessage = true,
-                Message = "Nenhum funcinário encontrado!"
-            };
+            employee.IdPermissionGroup = employeeDTO.IdPermissionGroup;
+            employee.Function = employeeDTO.Function;
+            employee.Status = employeeDTO.Status;
+            employee.Email = employeeDTO.Email;
+            employee.Name = employeeDTO.Name;
+           
+            return employee;
         }
 
-        private EmployeeDTO InternalServerError(string complementMessage)
+        private EmployeeDTO NotFound(EmployeeDTO employeeDTO)
         {
-            return new EmployeeDTO()
-            {
-                StatusErroMessage = true,
-                Message = $"Ops, não conseguimos {complementMessage}, tente mais tarde!"
-            };
+            employeeDTO.StatusErroMessage = true;
+            employeeDTO.Message = "Nenhum funcinário encontrado!";
+            return employeeDTO;
         }
 
+        private EmployeeDTO InternalServerError(EmployeeDTO employeeDTO, string complementMessage)
+        {
+            employeeDTO.StatusErroMessage = true;
+            employeeDTO.Message = $"Ops, não conseguimos {complementMessage}, tente mais tarde!";
+            return employeeDTO;
+        }
     }
 }
