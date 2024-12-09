@@ -1,6 +1,7 @@
 using Application.Services;
 using Data.Context;
 using InfrastructureIoC;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Configurando a autenticação com cookies, caso não estiver autenticado, será direcionado para a Login
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login/Index";
+        options.ExpireTimeSpan = TimeSpan.FromDays(1); // Tempo de expiração do cookie
+    });
 
 // Adicionar serviços ao contêiner (Injeção de Dependência)
 builder.Services.AddInfrastructureIoC();

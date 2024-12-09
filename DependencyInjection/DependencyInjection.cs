@@ -13,6 +13,9 @@ namespace InfrastructureIoC
     {
         public static IServiceCollection AddInfrastructureIoC(this IServiceCollection services)
         {
+            // Uso do Claim
+            services.AddHttpContextAccessor();
+
             services.AddScoped<IHomeService, HomeService>();
 
             services.AddScoped<IProductRepository, ProductRepository>();
@@ -24,6 +27,7 @@ namespace InfrastructureIoC
             services.AddScoped<IStockMovementsService, StockMovementsService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IPermissionGroupService, PermissionGroupService>();
+            services.AddScoped<ILoginService, LoginService>();
 
             services.AddScoped<IViewRenderService, ViewRenderService>();
             services.AddScoped<InitDbService>();

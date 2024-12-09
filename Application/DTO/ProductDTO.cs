@@ -2,7 +2,7 @@
 
 namespace Application.DTO
 {
-    public class ProductDTO : BaseDTO
+    public sealed class ProductDTO : BaseDTO
     {
         [Required(ErrorMessage = "O nome é obrigatório")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "O nome deve ter 3 a 100 caracteres")]

@@ -3,7 +3,7 @@ using Shared.Helper;
 
 namespace Application.DTO
 {
-    public class PermissionGroupDTO : BaseDTO
+    public sealed class PermissionGroupDTO : BaseDTO
     {
         [Required(ErrorMessage = "O nome é obrigatório")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "O nome deve ter 3 a 100 caracteres")]

@@ -1,12 +1,12 @@
 ﻿using Data.Context;
 using Domain.Entities;
 using Domain.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace Data.Repositories
 {
     public class PermissionGroupRepository : BaseRepository<PermissionGroup>, IPermissionGroupRepository
     {
-        public PermissionGroupRepository(AppDbContext db) : base(db) { }
+        public PermissionGroupRepository(AppDbContext db, IHttpContextAccessor httpContextAccessor) : base(db, httpContextAccessor) { }
     }
 }

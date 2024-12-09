@@ -2,7 +2,7 @@
 
 namespace Application.DTO
 {
-    public class EmployeeDTO : BaseDTO
+    public sealed class EmployeeDTO : BaseDTO
     {
         [Required(ErrorMessage = "Campo grupo de permissão é obrigatório.")]
         public int IdPermissionGroup { get; set; }

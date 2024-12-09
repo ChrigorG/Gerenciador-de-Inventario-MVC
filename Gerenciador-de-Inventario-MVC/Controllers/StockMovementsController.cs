@@ -1,9 +1,11 @@
 ﻿using Application.DTO;
 using Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gerenciador_de_Inventario_MVC.Controllers
 {
+    [Authorize]
     public class StockMovementsController : Controller
     {
         private readonly IStockMovementsService _stockMovementsService;

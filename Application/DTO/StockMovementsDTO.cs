@@ -1,9 +1,8 @@
-﻿
-using Domain.Entities;
+﻿using Domain.Entities;
 
 namespace Application.DTO
 {
-    public class StockMovementsDTO : BaseDTO
+    public sealed class StockMovementsDTO : BaseDTO
     {
         public int IdProduct { get; set; }
         public string ProductName { get; set; } = string.Empty;

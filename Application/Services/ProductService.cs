@@ -4,6 +4,7 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using Shared.Helper;
+using System.Security.Claims;
 
 namespace Application.Services
 {
@@ -66,6 +67,7 @@ namespace Application.Services
             {
                 product = _mapper.Map<Product>(productDTO);
                 product = _productRepository.Add(product);
+                
                 if (product == null)
                 {
                     return InternalServerError(productDTO, $"salvar os dados do funcionário {product!.Name}");

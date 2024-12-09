@@ -1,6 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-using System.Web.Helpers;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTO
 {
