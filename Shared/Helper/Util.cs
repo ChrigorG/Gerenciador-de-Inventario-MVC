@@ -11,6 +11,15 @@ namespace Shared.Helper
             return !value.HasValue || value.Value == 0;
         }
 
+        public static bool IsDebug()
+        {
+            #if DEBUG
+                return true;
+            #else
+                return false;
+            #endif
+        }
+
         public static bool IsNullOrDefault(DateTime? date)
         {
             return !date.HasValue || date.Value == default(DateTime);
@@ -41,8 +50,8 @@ namespace Shared.Helper
         public static string GeneratePassword(DateTime birthday, string firstName)
         {
             string password = string.Empty;
-                        
-            if(firstName.Length >= 2)
+
+            if (firstName.Length >= 2)
             {
                 password = firstName.ToLower().Substring(0, 2);
             }

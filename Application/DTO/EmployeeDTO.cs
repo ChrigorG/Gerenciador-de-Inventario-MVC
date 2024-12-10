@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace Application.DTO
 {
@@ -18,14 +19,29 @@ namespace Application.DTO
         [StringLength(100)]
         public string Email { get; set; } = string.Empty;
 
-        [StringLength(70, MinimumLength = 8, ErrorMessage = "A senha deve ter entre 8 a 70 caracteres.")]
         public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Campo status é obrigatório.")]
         public bool Status { get; set; } = true;
         public PermissionGroupDTO permissionGroupDTO { get; set; } = null!;
+        public List<PermissionGroupDTO> ListPermissionGroup { get; set; } = new List<PermissionGroupDTO>();
         public List<EmployeeDTO> ListEmployees { get; set; } = null!;
 
         public void ValidatedDTO() => Validate(this);
+
+        public IEnumerable<SelectListItem> GetListGroupPermission()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            this.ListPermissionGroup.ForEach(item => {
+                list.Add(new SelectListItem
+                {
+                    Text = item.Name,
+                    Value = $"{item.Id}"
+                });
+            });
+
+            return list;
+        }
     }
 }

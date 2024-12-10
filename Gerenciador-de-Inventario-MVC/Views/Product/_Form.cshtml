@@ -6,11 +6,11 @@
 }
 
 <div class="modal fade" id="form-product-modal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog custom-modal-size" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">@Model.Title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                <button type="button" class="close btn" data-bs-dismiss="modal" aria-label="Fechar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -22,18 +22,18 @@
                 <div class="row w-100">
                     @if (!Util.IsNullOrZero(Model.IdUserCreated) && !Util.IsNullOrDefault(Model.DatetimeCreate))
                     {
-                        <div class="col-6">
-                            <strong>Criado por: </strong> <span id="createdBy">@Model.IdUserCreated - @Model.NameUserCreated em @Util.DateHoursMinutes(Model.DatetimeCreate)</span>
+                        <div class="row">
+                            <span><strong>Criado por: </strong> <span id="createdBy">@Model.IdUserCreated - @Model.NameUserCreated em @Util.DateHoursMinutes(Model.DatetimeCreate)</span></span>
                         </div>
                     }
                     @if (!Util.IsNullOrZero(Model.IdUserUpdated) && !Util.IsNullOrDefault(Model.DatetimeUpdated))
                     {
-                        <div class="col-6">
-                            <strong>Atualizado por: </strong> <span id="createdDate">@Model.IdUserUpdated - @Model.NameUserUpdated em @Util.DateHoursMinutes(Model.DatetimeUpdated)</span>
+                        <div class="row">
+                            <span><strong>Atualizado por: </strong> <span id="createdDate">@Model.IdUserUpdated - @Model.NameUserUpdated em @Util.DateHoursMinutes(Model.DatetimeUpdated)</span></span>
                         </div>
                     }
                 </div>
-                <button type="button" class="btn btn-secondary" id="closeProductForm" data-dismiss="modal">Voltar</button>
+                <button type="button" class="btn btn-secondary" id="closeProductForm" data-bs-dismiss="modal">Voltar</button>
                 <button type="submit" class="btn btn-primary" id="submitProductForm">Salvar</button>
             </div>
         </div>

@@ -1,4 +1,5 @@
-﻿@model Application.DTO.LoginDTO;
+﻿@using Shared.Helper;
+@model Application.DTO.LoginDTO;
 
 @{
     Layout = "_LayoutLoggedOut";
@@ -33,10 +34,10 @@
         border-radius: 10px 0 0 10px;
     }
 
-    .left-panel img {
-        max-width: 100%;
-        height: auto;
-    }
+        .left-panel img {
+            max-width: 100%;
+            height: auto;
+        }
 
     .error {
         color: red;
@@ -44,6 +45,27 @@
 </style>
 
 <div class="container login-container">
+    @if (Util.IsDebug())
+    {
+        <div class="" role="alert" style="top: 0;
+                                        position: absolute;
+                                        right: 0;
+                                        margin: 50px;
+                                        background-color: antiquewhite;
+                                        padding: 10px;
+                                        border: 1px solid orange;
+                                        border-radius: 10px;">
+
+            <h4 class="alert-heading" style="color: darkred">Atenção: Ambiente de Debug</h4>
+            <hr>
+            <p class="mb-1">Este é um ambiente de teste.</p>
+            <ul class="list-unstyled">
+                <li><strong>Email:</strong> adm@gerenciadorinventario.com</li>
+                <li><strong>Senha:</strong> #dm2024</li>
+            </ul>
+        </div>
+    }
+
     <div class="row login-card">
         <div class="col-md-6 d-flex flex-column align-items-center left-panel">
             <h2 class="text-center">Bem vindo!</h2>

@@ -9,7 +9,7 @@ namespace Domain.Interfaces
         bool Any();
         List<T> Get();
         T? Get(int id);
-        T? Add(T entity);
+        T? Add(T entity, int? defaultUserId = null);
         T? Update(T entity);
         T? Delete(T entity);
     }

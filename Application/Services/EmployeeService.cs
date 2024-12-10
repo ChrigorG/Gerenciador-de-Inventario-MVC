@@ -4,11 +4,6 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using Shared.Helper;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Web.Helpers;
-using System.Xml.Linq;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
 
 namespace Application.Services
 {
@@ -17,14 +12,17 @@ namespace Application.Services
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IPermissionGroupRepository _permissionGroupRepository;
         private readonly IMapper _mapper;
+        private readonly IPermissionGroupService _permissionGroupService;
 
         public EmployeeService(IEmployeeRepository employeeRepository,
             IPermissionGroupRepository permissionGroupRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IPermissionGroupService permissionGroupService)
         {
             _employeeRepository = employeeRepository;
             _permissionGroupRepository = permissionGroupRepository;
             _mapper = mapper;
+            _permissionGroupService = permissionGroupService;
         }
 
         public EmployeeDTO GetEmployee()
@@ -43,12 +41,15 @@ namespace Application.Services
             {
                 return new EmployeeDTO()
                 {
-                    Title = "Adicionar um Funcionário"
+                    Title = "Adicionar um Funcionário",
+                    ListPermissionGroup = _permissionGroupService.GetList()
                 };
             }
 
             // A partir daqui seria somente para atualização do funcionario
             Employee? employee = _employeeRepository.Get(id);
+            Employee? employeeCreating = _employeeRepository.Get(employee?.IdUserCreated ?? 0);
+            Employee? employeeUpdating = _employeeRepository.Get(employee?.IdUserUpdated ?? 0);
             EmployeeDTO? employeeDTO = _mapper.Map<EmployeeDTO?>(employee);
 
             if (employeeDTO == null)
@@ -56,7 +57,10 @@ namespace Application.Services
                 return NotFound(new EmployeeDTO());
             }
 
+            employeeDTO.NameUserCreated = employeeCreating?.Name ?? "(Funcionario que criou foi desviculado do sistema)";
+            employeeDTO.NameUserUpdated = employeeUpdating?.Name ?? "(Funcionario que atualizou foi desviculado do sistema)";
             employeeDTO.Title = $"Atualizar os dados do funcionário {employeeDTO.Id} - {employeeDTO.Name}";
+            employeeDTO.ListPermissionGroup = _permissionGroupService.GetList();
             return employeeDTO;
         }
 
@@ -72,7 +76,16 @@ namespace Application.Services
             // Adicionar um novo Funcionário
             if (Util.IsNullOrZero(employeeDTO.Id))
             {
+                if (employeeDTO.Password.Length < 8 || employeeDTO.Password.Length > 70)
+                {
+                    employeeDTO.StatusErroMessage = true;
+                    employeeDTO.Message = "A senha deve ter entre 8 a 70 caracteres";
+                    return employeeDTO;
+                }
+
                 employee = _mapper.Map<Employee>(employeeDTO);
+                employee.Password = Util.HashPassword(employee.Password);
+
                 employee = _employeeRepository.Add(employee);
                 if (employee == null)
                 {
@@ -95,6 +108,7 @@ namespace Application.Services
             }
 
             employeeDTO = _mapper.Map<EmployeeDTO>(employee);
+            employeeDTO.Message = "Dados salvos com sucesso!";
             employeeDTO.ListEmployees = GetList();
             return employeeDTO;
         }

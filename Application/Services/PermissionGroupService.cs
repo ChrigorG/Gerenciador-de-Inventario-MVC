@@ -112,7 +112,7 @@ namespace Application.Services
             return permissionGroupDTO;
         }
 
-        private List<PermissionGroupDTO> GetList()
+        public List<PermissionGroupDTO> GetList()
         {
             List<PermissionGroup> permissionGroup = _permissionGroupRepository.Get();
             return _mapper.Map<List<PermissionGroupDTO>>(permissionGroup);

@@ -11,5 +11,7 @@ namespace Application.Interfaces
         PermissionGroupDTO SavePermissionGroup(PermissionGroupDTO permissionGroupDTO);
 
         PermissionGroupDTO DeletePermissionGroup(int id);
+
+        List<PermissionGroupDTO> GetList();
     }
 }

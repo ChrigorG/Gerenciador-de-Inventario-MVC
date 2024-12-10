@@ -4,22 +4,6 @@
         enableExport: false,
         order: [[1, 'asc']],
     }).init();
-
-    // Selecionar todos os checkboxes
-    $('#selectAll').on('click', function () {
-        var rows = table.rows({ 'search': 'applied' }).nodes();
-        $('input[type="checkbox"].selectItem', rows).prop('checked', this.checked);
-    });
-
-    // Atualizar o checkbox principal ao alterar qualquer checkbox individual
-    $('#employeeTable tbody').on('change', 'input[type="checkbox"].selectItem', function () {
-        if (!this.checked) {
-            var el = $('#selectAll').get(0);
-            if (el && el.checked && ('indeterminate' in el)) {
-                el.indeterminate = true;
-            }
-        }
-    });
 });
 
 async function OpenDetailEmployee(id) {

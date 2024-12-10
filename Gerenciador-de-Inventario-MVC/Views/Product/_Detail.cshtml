@@ -6,31 +6,16 @@
 }
 
 <div class="modal fade" id="detail-product-modal" tabindex="-1" role="dialog" aria-labelledby="detail-product-modalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog custom-modal-size" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">@Model.Title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                <button type="button" class="close btn" data-bs-dismiss="modal" aria-label="Fechar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="id">Id</label>
-                    <input type="number" class="form-control" asp-for="Id" disabled />
-                </div>
-                <div class="form-group">
-                    <label for="name">Nome</label>
-                    <input type="text" class="form-control" asp-for="Name" required />
-                </div>
-                <div class="form-group">
-                    <label for="description">Descrição</label>
-                    <input type="text" class="form-control" asp-for="Description" required />
-                </div>
-                <div class="form-group">
-                    <label for="price">Preço</label>
-                    <input type="number" class="form-control" asp-for="Price" step="0.01" required />
-                </div>
+                <partial name="_PartialForm" model="Model" />
             </div>
 
             <div class="modal-footer">
@@ -48,7 +33,7 @@
                         </div>
                     }
                 </div>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Voltar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
             </div>
         </div>
     </div>

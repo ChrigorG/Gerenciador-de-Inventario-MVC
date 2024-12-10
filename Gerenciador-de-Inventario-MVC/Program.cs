@@ -27,6 +27,15 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // Adicionar serviços ao contêiner (Injeção de Dependência)
 builder.Services.AddInfrastructureIoC();
 
+// Adicionando o serviço de sessão
+builder.Services.AddDistributedMemoryCache(); // Usa a memória para armazenar os dados da sessão
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromDays(1);  // Tempo de expiração da sessão
+    options.Cookie.HttpOnly = true;  // A sessão será acessível apenas via HTTP
+    options.Cookie.IsEssential = true; 
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,6 +46,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Usando a sessão no pipeline de requisições
+app.UseSession();  // Isso permite o uso da sessão na aplicação
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

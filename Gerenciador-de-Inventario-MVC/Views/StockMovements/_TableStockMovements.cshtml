@@ -7,9 +7,6 @@
 <table id="stockMovementsTable" class="table table-bordered table-striped table-hover">
     <thead>
         <tr>
-            <th scope="col">
-                <input type="checkbox" id="selectAll" />
-            </th>
             <th scope="col">Id</th>
             <th scope="col">Produto</th>
             <th scope="col">Unidade de Medida</th>
@@ -23,9 +20,6 @@
         @foreach (StockMovementsDTO stock in Model.ListStockMovements)
         {
             <tr>
-                <td>
-                    <input type="checkbox" class="selectItem" />
-                </td>
                 <td>@stock.Id</td>
                 <td>@stock.ProductName</td>
                 <td>@stock.UnitType</td>
@@ -49,4 +43,4 @@
     </tbody>
 </table>
 
-<script src="~/js/Domain/Product/TableProduct.js" asp-append-version="true"></script>
+<script src="~/js/Domain/StockMovements/TableStockMovements.js" asp-append-version="true"></script>

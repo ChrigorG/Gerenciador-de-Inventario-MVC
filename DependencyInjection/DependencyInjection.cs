@@ -34,7 +34,7 @@ namespace InfrastructureIoC
 
             // Configuração do AutoMapper
             // Configura o AutoMapper para registrar todos os perfis de mapeamento
-            services.AddAutoMapper(typeof(MappingProfile).Assembly);
+            services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

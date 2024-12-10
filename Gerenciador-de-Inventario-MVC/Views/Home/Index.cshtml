@@ -1,8 +1,72 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<div class="container text-center">
+    <h1 class="display-4">Bem-vindo(a)</h1>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="material-symbols-outlined" style="color: #007bff;">business</span>
+                        Regras de Negócio
+                    </h5>
+                    <p class="card-text">Este projeto implementa regras de negócios chave, como o controle de permissões de acesso para os funcionários. Cada colaborador é atribuído a um grupo de permissões, determinando as áreas do sistema que ele pode acessar. Por exemplo, um funcionário pode ter permissão para cadastrar produtos ou realizar movimentações de estoque (entradas e saídas), de acordo com suas responsabilidades.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="material-symbols-outlined" style="color: #28a745;">code</span>
+                        Sobre o Desenvolvimento
+                    </h5>
+                    <p class="card-text">Desenvolvido como uma demonstração prática, o projeto segue o padrão MVC e a arquitetura Clean Architecture, utilizando .NET 8 e SQL Server. A modularização e manutenção do código foram facilitadas pelo uso de interfaces e injeção de dependência. A interface foi construída com Bootstrap 5, e a autenticação foi implementada com Claims. O controle de acesso é feito por grupos de permissões, garantindo níveis diferenciados de acesso, como cadastrar produtos ou movimentar o estoque.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="alert alert-info">
+                <h4 class="alert-heading">
+                    <span class="material-symbols-outlined" style="color: #ffc107;">info</span>
+                    Detalhes do Projeto
+                </h4>
+                <p>Este projeto utiliza o padrão MVC, a arquitetura Clean Architecture, e outras melhores práticas, como o uso de injeção de dependência e autenticação via Claims. Ele oferece um controle preciso de permissões para garantir que cada funcionário tenha acesso apenas ao necessário para suas funções.</p>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- CSS personalizado -->
+<style>
+    p{
+        color: slategray;
+    }
+
+    .custom-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        max-height: 300px;
+        overflow: hidden;
+    }
+
+        .custom-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-card .card-body {
+            max-height: 100px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .custom-card:hover .card-body {
+            max-height: 500px;
+        }
+</style>

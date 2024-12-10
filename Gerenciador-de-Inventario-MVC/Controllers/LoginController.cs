@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Shared.Helper;
 using System.Security.Claims;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -70,7 +69,7 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult LogoutAsync()
+        public IActionResult Logout()
         {
             // Limpa as informações de autenticação (sessão)
             HttpContext.Session.Clear();
