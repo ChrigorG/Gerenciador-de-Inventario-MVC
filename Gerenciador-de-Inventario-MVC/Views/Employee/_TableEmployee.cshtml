@@ -28,7 +28,7 @@
                 <td>@employee.permissionGroupDTO.Name</td>
                 <td class="status-user center-align">
                     <span class="chip @ListStandard.ValidateActiveInativeColor(employee.Status)">
-                        <span class="text-white">
+                        <span class="@ListStandard.ValidateActiveInativeColorText(employee.Status)">
                             @ListStandard.ValidateActiveInative(employee.Status)
                         </span>
                     </span>

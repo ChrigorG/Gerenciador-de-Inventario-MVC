@@ -1,4 +1,32 @@
-﻿<div class="container text-center">
+﻿<style>
+    p {
+        color: slategray;
+    }
+
+    .custom-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        max-height: 300px;
+        overflow: hidden;
+    }
+
+    .custom-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .custom-card .card-body {
+        max-height: 100px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .custom-card:hover .card-body {
+        max-height: 500px;
+    }
+</style>
+
+<div class="container text-center">
     <h1 class="display-4">Bem-vindo(a)</h1>
 
     <div class="row justify-content-center mb-4">
@@ -42,31 +70,15 @@
     </div>
 </div>
 
-<!-- CSS personalizado -->
-<style>
-    p{
-        color: slategray;
-    }
-
-    .custom-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-        max-height: 300px;
-        overflow: hidden;
-    }
-
-        .custom-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .custom-card .card-body {
-            max-height: 100px;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .custom-card:hover .card-body {
-            max-height: 500px;
-        }
-</style>
+@if (TempData["MessageErroHome"] != null)
+{
+    <script>
+        $(() => {
+            Swal.fire({
+                title: "Atenção",
+                text: "@(TempData["MessageErroHome"])",
+                icon: "warning"
+            });
+        });
+    </script>
+}

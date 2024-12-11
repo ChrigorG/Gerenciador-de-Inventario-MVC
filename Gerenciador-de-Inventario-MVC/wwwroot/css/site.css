@@ -50,6 +50,16 @@ footer {
     margin-bottom: 50px;
 }
 
+.material-symbols-outlined {
+    font-size: 20px !important;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.chip {
+    background-color: white !important;
+}
+
 /*  Tabela com engrenagem  */
 .gear-button {
     background: none;

@@ -26,6 +26,13 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             try
             {
                 PermissionGroupDTO permissionGroupDTO = _permissionGroupService.GetPermissionGroup();
+
+                if (permissionGroupDTO.StatusErroMessage)
+                {
+                    TempData["MessageErroHome"] = permissionGroupDTO.Message;
+                    return RedirectToAction("Index", "Home");
+                }
+
                 return View(permissionGroupDTO);
             } catch (Exception)
             {

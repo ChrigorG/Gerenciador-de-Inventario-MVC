@@ -16,13 +16,13 @@ namespace Application.DTO
         public bool Status { get; set; } = true;
 
         [Required(ErrorMessage = "A ação da tela do funcionário é obrigatório")]
-        public string ActionEmployee { get; set; } = string.Empty;
+        public string ActionEmployee { get; set; } = Constants.PermissionAccess;
 
         [Required(ErrorMessage = "A ação da tela do produto é obrigatório")]
-        public string ActionProduct { get; set; } = string.Empty;
+        public string ActionProduct { get; set; } = Constants.PermissionAccess;
 
         [Required(ErrorMessage = "A ação da tela do estoque de momentação é obrigatório")]
-        public string ActionStockMovements { get; set; } = string.Empty;
+        public string ActionStockMovements { get; set; } = Constants.PermissionAccess;
 
         [Required(ErrorMessage = "A ação da tela do grupo de permissão é obrigatório")]
         public string ActionPermissionGroup { get; set; } = Constants.PermissionDenied;

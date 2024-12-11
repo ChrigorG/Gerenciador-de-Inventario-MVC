@@ -3,6 +3,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Shared.Helper;
 using System.Security.Claims;
 
@@ -10,51 +11,82 @@ namespace Application.Services
 {
     public class ProductService : IProductService
     {
+        private readonly IPermissionGroupRepository _permissionGroupRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
 
         public ProductService(IProductRepository productRepository,
+            IPermissionGroupRepository permissionGroupRepository,
+            IHttpContextAccessor httpContextAccessor,
+            IEmployeeRepository employeeRepository,
             IMapper mapper)
         {
+            _permissionGroupRepository = permissionGroupRepository;
+            _httpContextAccessor = httpContextAccessor;
+            _employeeRepository = employeeRepository;
             _productRepository = productRepository;
             _mapper = mapper;
         }
 
         public ProductDTO GetProduct()
         {
-            return new ProductDTO()
+            ProductDTO? productDTO = new ProductDTO();
+            string permission = this.GetPermission();
+            if (permission == Constants.PermissionDenied)
             {
-                Title = "Produtos",
-                ListProducts = GetList()
-            };
+                productDTO.StatusErroMessage = true;
+                productDTO.Message = "Acesso negado!";
+                return productDTO;
+            }
+
+            productDTO.Title = "Produtos";
+            productDTO.ListProducts = GetList();
+            return productDTO;
         }
 
         public ProductDTO FormProduct(int id)
         {
+            ProductDTO? productDTO = new ProductDTO();
+            string permission = this.GetPermission();
+            if (permission != Constants.PermissionAccess)
+            {
+                productDTO.StatusErroMessage = true;
+                productDTO.Message = "Acesso negado!";
+                return productDTO;
+            }
+
             // Se o id for nullo ou zero será tratado como um novo produto
             if (Util.IsNullOrZero(id))
             {
-                ProductDTO productDTO = new();
                 productDTO.Title = "Adicionar um Produto";
                 return productDTO;
-
             }
 
             // A partir daqui seria somente para atualização do produto
             Product? products = _productRepository.Get(id);
-            ProductDTO? productsDTO = _mapper.Map<ProductDTO?>(products);
+            productDTO = _mapper.Map<ProductDTO?>(products);
 
-            if (productsDTO == null)
+            if (productDTO == null)
             {
                 return NotFound(new ProductDTO());
             }
 
-            productsDTO.Title = $"Atualizar os dados do produto {productsDTO.Id} - {productsDTO.Name}";
-            return productsDTO;
+            productDTO.Title = $"Atualizar os dados do produto {productDTO.Id} - {productDTO.Name}";
+            return productDTO;
         }
 
         public ProductDTO SaveProduct(ProductDTO productDTO)
         {
+            string permission = this.GetPermission();
+            if (permission != Constants.PermissionAccess)
+            {
+                productDTO.StatusErroMessage = true;
+                productDTO.Message = "Acesso negado!";
+                return productDTO;
+            }
+
             productDTO.ValidatedDTO();
             if (productDTO.StatusErroMessage)
             {
@@ -95,6 +127,15 @@ namespace Application.Services
 
         public ProductDTO DeleteProduct(int id)
         {
+            ProductDTO? productDTO = new ProductDTO();
+            string permission = this.GetPermission();
+            if (permission != Constants.PermissionAccess)
+            {
+                productDTO.StatusErroMessage = true;
+                productDTO.Message = "Acesso negado!";
+                return productDTO;
+            }
+
             Product? product = _productRepository.Get(id);
 
             if (product == null)
@@ -108,10 +149,24 @@ namespace Application.Services
                 return InternalServerError(new ProductDTO(), $"deletar o produto {product!.Id} - {product!.Name}");
             }
 
-            ProductDTO productDTO = _mapper.Map<ProductDTO>(product);
+            productDTO = _mapper.Map<ProductDTO>(product);
             productDTO.ListProducts = GetList();
             productDTO.Message = $"Produto {product.Id} - {product.Name} deletado com sucesso!";
             return productDTO;
+        }
+
+        private string GetPermission()
+        {
+            var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier);
+            int userId = 0;
+            if (userIdClaim != null && int.TryParse(userIdClaim!.Value, out userId))
+            {
+                Employee? employee = _employeeRepository.Get(userId);
+                PermissionGroup? permissionGroup = _permissionGroupRepository.Get(employee?.IdPermissionGroup ?? 0);
+
+                return permissionGroup?.ActionPermissionGroup ?? Constants.PermissionDenied;
+            }
+            return Constants.PermissionDenied;
         }
 
         private List<ProductDTO> GetList()

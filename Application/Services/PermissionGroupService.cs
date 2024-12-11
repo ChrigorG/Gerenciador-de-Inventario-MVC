@@ -3,34 +3,57 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Shared.Helper;
+using System.Security.Claims;
 
 namespace Application.Services
 {
     public class PermissionGroupService : IPermissionGroupService
     {
         private readonly IPermissionGroupRepository _permissionGroupRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
 
-        public PermissionGroupService(
-            IPermissionGroupRepository permissionGroupRepository,
+        public PermissionGroupService(IPermissionGroupRepository permissionGroupRepository,
+            IHttpContextAccessor httpContextAccessor,
+            IEmployeeRepository employeeRepository,
             IMapper mapper)
         {
             _permissionGroupRepository = permissionGroupRepository;
+            _httpContextAccessor = httpContextAccessor;
+            _employeeRepository = employeeRepository;
             _mapper = mapper;
         }
 
         public PermissionGroupDTO GetPermissionGroup()
         {
-            return new PermissionGroupDTO()
+            PermissionGroupDTO? permissionGroupDTO = new PermissionGroupDTO();
+            string permission = this.GetPermission();
+            if (permission == Constants.PermissionDenied)
             {
-                Title = "Grupo de Permissão",
-                ListPermissionGroup = GetList()
-            };
+                permissionGroupDTO.StatusErroMessage = true;
+                permissionGroupDTO.Message = "Acesso negado!";
+                return permissionGroupDTO;
+            }
+
+            permissionGroupDTO.Title = "Grupo de Permissão";
+            permissionGroupDTO.ListPermissionGroup = GetList();
+            return permissionGroupDTO;
         }
 
         public PermissionGroupDTO FormPermissionGroup(int id)
         {
+            PermissionGroupDTO? permissionGroupDTO = new PermissionGroupDTO();
+            string permission = this.GetPermission();
+            if (permission != Constants.PermissionAccess)
+            {
+                permissionGroupDTO.StatusErroMessage = true;
+                permissionGroupDTO.Message = "Acesso negado!";
+                return permissionGroupDTO;
+            }
+
             // Se o id for nullo ou zero será tratado como um novo Funcionario
             if (Util.IsNullOrZero(id))
             {
@@ -42,7 +65,7 @@ namespace Application.Services
 
             // A partir daqui seria somente para atualização do grupo de permissão
             PermissionGroup? permissionGroup = _permissionGroupRepository.Get(id);
-            PermissionGroupDTO? permissionGroupDTO = _mapper.Map<PermissionGroupDTO?>(permissionGroup);
+             permissionGroupDTO = _mapper.Map<PermissionGroupDTO?>(permissionGroup);
 
             if (permissionGroupDTO == null)
             {
@@ -55,6 +78,14 @@ namespace Application.Services
 
         public PermissionGroupDTO SavePermissionGroup(PermissionGroupDTO permissionGroupDTO)
         {
+            string permission = this.GetPermission();
+            if (permission != Constants.PermissionAccess)
+            {
+                permissionGroupDTO.StatusErroMessage = true;
+                permissionGroupDTO.Message = "Acesso negado!";
+                return permissionGroupDTO;
+            }
+
             permissionGroupDTO.ValidatedDTO();
             if (permissionGroupDTO.StatusErroMessage)
             {
@@ -94,6 +125,15 @@ namespace Application.Services
 
         public PermissionGroupDTO DeletePermissionGroup(int id)
         {
+            PermissionGroupDTO? permissionGroupDTO = new PermissionGroupDTO();
+            string permission = this.GetPermission();
+            if (permission != Constants.PermissionAccess)
+            {
+                permissionGroupDTO.StatusErroMessage = true;
+                permissionGroupDTO.Message = "Acesso negado!";
+                return permissionGroupDTO;
+            }
+
             PermissionGroup? permissionGroup = _permissionGroupRepository.Get(id);
 
             if (permissionGroup == null)
@@ -107,7 +147,7 @@ namespace Application.Services
                 return InternalServerError(new PermissionGroupDTO(), $"deletar o grupo de permissão {permissionGroup!.Id} - {permissionGroup!.Name}");
             }
 
-            PermissionGroupDTO permissionGroupDTO = _mapper.Map<PermissionGroupDTO>(permissionGroup);
+            permissionGroupDTO = _mapper.Map<PermissionGroupDTO>(permissionGroup);
             permissionGroupDTO.ListPermissionGroup = GetList();
             return permissionGroupDTO;
         }
@@ -116,6 +156,20 @@ namespace Application.Services
         {
             List<PermissionGroup> permissionGroup = _permissionGroupRepository.Get();
             return _mapper.Map<List<PermissionGroupDTO>>(permissionGroup);
+        }
+
+        private string GetPermission()
+        {
+            var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier);
+            int userId = 0;
+            if (userIdClaim != null && int.TryParse(userIdClaim!.Value, out userId))
+            {
+                Employee? employee = _employeeRepository.Get(userId);
+                PermissionGroup? permissionGroup = _permissionGroupRepository.Get(employee?.IdPermissionGroup ?? 0);
+
+                return permissionGroup?.ActionPermissionGroup ?? Constants.PermissionDenied;
+            }
+            return Constants.PermissionDenied;
         }
 
         private PermissionGroup ConvertDtoToModel(PermissionGroup permissionGroup, PermissionGroupDTO permissionGroupDTO)

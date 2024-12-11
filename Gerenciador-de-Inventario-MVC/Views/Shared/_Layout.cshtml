@@ -56,17 +56,30 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Index">Funcionários</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Index">
+                                <span class="material-symbols-outlined">group</span> Funcionários
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Produtos</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="PermissionGroup" asp-action="Index">
+                                <span class="material-symbols-outlined">security</span> Grupo de Permissão
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="StockMovements" asp-action="Index">Movimentação do Estoque</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">
+                                <span class="material-symbols-outlined">shopping_cart</span> Produtos
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Sale" asp-action="Index">Venda</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="StockMovements" asp-action="Index">
+                                <span class="material-symbols-outlined">inventory</span> Movimentação do Estoque
+                            </a>
                         </li>
+                        @* <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Sale" asp-action="Index">
+                                <span class="material-symbols-outlined">sell</span> Venda
+                            </a>
+                        </li> *@
                     </ul>
 
                     <!-- Botão Logout -->

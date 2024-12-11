@@ -3,7 +3,9 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Shared.Helper;
+using System.Security.Claims;
 
 namespace Application.Services
 {
@@ -11,31 +13,51 @@ namespace Application.Services
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IPermissionGroupRepository _permissionGroupRepository;
-        private readonly IMapper _mapper;
         private readonly IPermissionGroupService _permissionGroupService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
 
         public EmployeeService(IEmployeeRepository employeeRepository,
             IPermissionGroupRepository permissionGroupRepository,
-            IMapper mapper,
-            IPermissionGroupService permissionGroupService)
+            IPermissionGroupService permissionGroupService,
+            IHttpContextAccessor httpContextAccessor,
+            IMapper mapper)
         {
             _employeeRepository = employeeRepository;
             _permissionGroupRepository = permissionGroupRepository;
-            _mapper = mapper;
             _permissionGroupService = permissionGroupService;
+            _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
         }
 
         public EmployeeDTO GetEmployee()
         {
-            return new EmployeeDTO()
+            EmployeeDTO? employeeDTO = new EmployeeDTO();
+            string permission = this.GetPermission();
+            if (permission == Constants.PermissionDenied)
             {
-                Title = "Funcionário",
-                ListEmployees = GetList()
-            };
+                employeeDTO.StatusErroMessage = true;
+                employeeDTO.Message = "Acesso negado!";
+                return employeeDTO;
+            }
+
+            employeeDTO.Title = "Funcionário";
+            employeeDTO.ListEmployees = GetList();
+            return employeeDTO;
         }
 
         public EmployeeDTO FormEmployee(int id)
         {
+            EmployeeDTO? employeeDTO = new EmployeeDTO();
+
+            string permission = this.GetPermission();
+            if (permission != Constants.PermissionAccess)
+            {
+                employeeDTO.StatusErroMessage = true;
+                employeeDTO.Message = "Acesso negado!";
+                return employeeDTO;
+            }
+
             // Se o id for nullo ou zero será tratado como um novo Funcionario
             if (Util.IsNullOrZero(id))
             {
@@ -50,7 +72,7 @@ namespace Application.Services
             Employee? employee = _employeeRepository.Get(id);
             Employee? employeeCreating = _employeeRepository.Get(employee?.IdUserCreated ?? 0);
             Employee? employeeUpdating = _employeeRepository.Get(employee?.IdUserUpdated ?? 0);
-            EmployeeDTO? employeeDTO = _mapper.Map<EmployeeDTO?>(employee);
+            employeeDTO = _mapper.Map<EmployeeDTO?>(employee);
 
             if (employeeDTO == null)
             {
@@ -66,6 +88,14 @@ namespace Application.Services
 
         public EmployeeDTO SaveEmploye(EmployeeDTO employeeDTO)
         {
+            string permission = this.GetPermission();
+            if (permission != Constants.PermissionAccess)
+            {
+                employeeDTO.StatusErroMessage = true;
+                employeeDTO.Message = "Acesso negado!";
+                return employeeDTO;
+            }
+
             employeeDTO.ValidatedDTO();
             if (employeeDTO.StatusErroMessage)
             {
@@ -115,6 +145,15 @@ namespace Application.Services
 
         public EmployeeDTO DeleteEmploye(int id)
         {
+            EmployeeDTO? employeeDTO = new EmployeeDTO();
+            string permission = this.GetPermission();
+            if (permission == Constants.PermissionAccess)
+            {
+                employeeDTO.StatusErroMessage = true;
+                employeeDTO.Message = "Acesso negado!";
+                return employeeDTO;
+            }
+
             Employee? employee = _employeeRepository.Get(id);
 
             if (employee == null)
@@ -128,7 +167,7 @@ namespace Application.Services
                 return InternalServerError(new EmployeeDTO(), $"deletar o funcionário {employee!.Id} - {employee!.Name}");
             }
 
-            EmployeeDTO employeeDTO = _mapper.Map<EmployeeDTO>(employee);
+            employeeDTO = _mapper.Map<EmployeeDTO>(employee);
             employeeDTO.ListEmployees = GetList();
             return employeeDTO;
         }
@@ -160,6 +199,20 @@ namespace Application.Services
             return employeeDTOs;
         }
 
+        private string GetPermission()
+        {
+            var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier);
+            int userId = 0;
+            if (userIdClaim != null && int.TryParse(userIdClaim!.Value, out userId))
+            {
+                Employee? employee = _employeeRepository.Get(userId);
+                PermissionGroup? permissionGroup = _permissionGroupRepository.Get(employee?.IdPermissionGroup ?? 0);
+
+                return permissionGroup?.ActionEmployee ?? Constants.PermissionDenied;
+            }
+            return Constants.PermissionDenied;
+        }
+
         private Employee ConvertDtoToModel(Employee employee, EmployeeDTO employeeDTO)
         {
             employee.IdPermissionGroup = employeeDTO.IdPermissionGroup;
@@ -167,7 +220,7 @@ namespace Application.Services
             employee.Status = employeeDTO.Status;
             employee.Email = employeeDTO.Email;
             employee.Name = employeeDTO.Name;
-           
+
             return employee;
         }
 
