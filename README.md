@@ -32,6 +32,8 @@ Este projeto foi criado com foco no aprendizado e na prática de desenvolvimento
 
 ## Modo de uso
 
+Fazer o clone do projeto e recomendo abrir dentro do Visual Studio.
+
 Ter instalado o SQLServer >= 15.0.4153
 
 Realizar as migrations disponivel dentro do projeto "Gerenciador-de-Inventario-MVC" --> "Migrations.txt"
