@@ -102,7 +102,7 @@ namespace Application.Services
                 
                 if (product == null)
                 {
-                    return InternalServerError(productDTO, $"salvar os dados do funcionário {product!.Name}");
+                    return InternalServerError(productDTO, $"salvar os dados do produto {product!.Name}");
                 }
             } else // Atualizar o Funcionário
             {
@@ -116,7 +116,7 @@ namespace Application.Services
                 product = _productRepository.Update(product);
                 if (product == null)
                 {
-                    return InternalServerError(productDTO, $"atualizar o funcionário {product!.Id} - {product!.Name}");
+                    return InternalServerError(productDTO, $"atualizar o produto {product!.Id} - {product!.Name}");
                 }
             }
 
@@ -169,7 +169,7 @@ namespace Application.Services
             return Constants.PermissionDenied;
         }
 
-        private List<ProductDTO> GetList()
+        public List<ProductDTO> GetList()
         {
             List<Product> products = _productRepository.Get();
             return _mapper.Map<List<ProductDTO>>(products);

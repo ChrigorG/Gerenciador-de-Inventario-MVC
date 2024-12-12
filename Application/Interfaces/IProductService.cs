@@ -11,5 +11,7 @@ namespace Application.Interfaces
         ProductDTO SaveProduct(ProductDTO productDTO);
                   
         ProductDTO DeleteProduct(int id);
+
+        List<ProductDTO> GetList();
     }
 }

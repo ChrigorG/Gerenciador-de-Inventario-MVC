@@ -1,20 +1,11 @@
-﻿$(document).ready(function () {
-    // Inicializar DataTables
-    var table = new DataTableHelper('#stockMovementsTable', {
-        enableExport: true,
-        order: [[1, 'asc']],
-    }).init();
-});
-
-async function OpenDetailStockMovements(id) {
+﻿async function OpenFormStockMovements() {
     $.ajax({
-        url: "/StockMovements/Detail",
+        url: "/StockMovements/Form",
         type: "POST",
-        data: { id: id },
         success: function (response) {
             if (!response.statusErro) {
                 new Modal({
-                    id: "detail-stock-movements-modal",
+                    id: "form-stock-movements-modal",
                     html: response.view
                 }).Create();
             } else {

@@ -5,7 +5,7 @@
     this.Layout = null;
 }
 
-<div class="modal fade" id="detail-stock-movements-modal" tabindex="-1" role="dialog" aria-labelledby="detail-stock-movements-modalLabel" aria-hidden="true">
+<div class="modal fade" id="form-stock-movements-modal" tabindex="-1" role="dialog" aria-labelledby="form-stock-movements-modalLabel" aria-hidden="true">
     <div class="modal-dialog custom-modal-size" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,7 +14,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="divPartialFormStockMovements">
                 <partial name="_PartialForm" model="Model" />
             </div>
 
@@ -27,10 +27,9 @@
                         </div>
                     }
                 </div>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                <button type="button" class="btn btn-secondary" id="closeFormStockMovements" data-bs-dismiss="modal">Voltar</button>
+                <button type="submit" class="btn btn-primary" id="submitStockMovementsForm">Salvar</button>
             </div>
         </div>
     </div>
 </div>
-
-<script src="~/js/Domain/StockMovements/Detail.js" asp-append-version="true"></script>

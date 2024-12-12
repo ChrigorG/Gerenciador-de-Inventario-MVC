@@ -48,14 +48,14 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             }
         }
 
-        public async Task<IActionResult> Save(ProductDTO productDTO)
+        public IActionResult Save(ProductDTO productDTO)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
                     _responseDTO.StatusErro = true;
-                    _responseDTO.View = _viewRenderService.RenderToString(this, "_Form", productDTO);
+                    _responseDTO.View = _viewRenderService.RenderToString(this, "_PartialForm", productDTO);
                     return Json(_responseDTO);
                 }
 
@@ -67,6 +67,7 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
                     return Json(_responseDTO);
                 }
 
+                _responseDTO.Message = productDTO.Message;
                 _responseDTO.View = _viewRenderService.RenderToString(this, "_TableProduct", productDTO);
                 return Json(_responseDTO);
             } catch (Exception)
@@ -77,7 +78,7 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             }
         }
 
-        public async Task<IActionResult> Detail(int id)
+        public IActionResult Detail(int id)
         {
             try
             {

@@ -21,9 +21,17 @@
     <!-- Card Inferior com Tabela -->
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive">
+            <button type="button" class="btn btn-outline-primary d-flex align-items-center" onclick="OpenFormStockMovements()">
+                <span class="material-symbols-outlined me-2">
+                    add
+                </span>
+                Adicionar Produto no Estoque
+            </button>
+            <div class="table-responsive" id="divTableStockMovements" style="margin-top: 20px">
                 <partial name="_TableStockMovements" model="Model" />
             </div>
         </div>
     </div>
 </div>
+
+<script src="~/js/Domain/StockMovements/Index.js" asp-append-version="true"></script>

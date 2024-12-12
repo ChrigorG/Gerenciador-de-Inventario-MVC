@@ -62,7 +62,7 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
                 if (!ModelState.IsValid)
                 {
                     _responseDTO.StatusErro = true;
-                    _responseDTO.View = _viewRenderService.RenderToString(this, "_Form", permissionGroupDTO);
+                    _responseDTO.View = _viewRenderService.RenderToString(this, "_PartialForm", permissionGroupDTO);
                     return Json(_responseDTO);
                 }
 
@@ -74,6 +74,7 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
                     return Json(_responseDTO);
                 }
 
+                _responseDTO.Message = permissionGroupDTO.Message;
                 _responseDTO.View = _viewRenderService.RenderToString(this, "_TablePermissionGroup", permissionGroupDTO);
                 return Json(_responseDTO);
             } catch (Exception)

@@ -47,7 +47,7 @@ namespace Application.Services
         {
             PermissionGroupDTO? permissionGroupDTO = new PermissionGroupDTO();
             string permission = this.GetPermission();
-            if (permission != Constants.PermissionAccess)
+            if (permission != Constants.PermissionAccess || id == 1) //Id == 1 é o administrador, e não é permitido fazer sua alteração
             {
                 permissionGroupDTO.StatusErroMessage = true;
                 permissionGroupDTO.Message = "Acesso negado!";
@@ -79,7 +79,7 @@ namespace Application.Services
         public PermissionGroupDTO SavePermissionGroup(PermissionGroupDTO permissionGroupDTO)
         {
             string permission = this.GetPermission();
-            if (permission != Constants.PermissionAccess)
+            if (permission != Constants.PermissionAccess || permissionGroupDTO.Id == 1) //Id == 1 é o administrador, e não é permitido fazer sua alteração
             {
                 permissionGroupDTO.StatusErroMessage = true;
                 permissionGroupDTO.Message = "Acesso negado!";
@@ -100,7 +100,7 @@ namespace Application.Services
                 permissionGroup = _permissionGroupRepository.Add(permissionGroup);
                 if (permissionGroup == null)
                 {
-                    return InternalServerError(permissionGroupDTO, $"salvar os dados do funcionário {permissionGroup!.Name}");
+                    return InternalServerError(permissionGroupDTO, $"salvar os dados do Grupo de Permissão: {permissionGroup!.Name}");
                 }
             } else // Atualizar o Funcionário
             {
@@ -114,7 +114,7 @@ namespace Application.Services
                 permissionGroup = _permissionGroupRepository.Update(permissionGroup);
                 if (permissionGroup == null)
                 {
-                    return InternalServerError(permissionGroupDTO, $"atualizar o funcionário {permissionGroup!.Id} - {permissionGroup!.Name}");
+                    return InternalServerError(permissionGroupDTO, $"atualizar o Grupo de Permissão {permissionGroup!.Id} - {permissionGroup!.Name}");
                 }
             }
 
@@ -127,7 +127,7 @@ namespace Application.Services
         {
             PermissionGroupDTO? permissionGroupDTO = new PermissionGroupDTO();
             string permission = this.GetPermission();
-            if (permission != Constants.PermissionAccess)
+            if (permission != Constants.PermissionAccess || id == 1) //Id == 1 é o administrador, e não é permitido fazer sua alteração
             {
                 permissionGroupDTO.StatusErroMessage = true;
                 permissionGroupDTO.Message = "Acesso negado!";
@@ -144,7 +144,7 @@ namespace Application.Services
             permissionGroup = _permissionGroupRepository.Delete(permissionGroup);
             if (permissionGroup == null)
             {
-                return InternalServerError(new PermissionGroupDTO(), $"deletar o grupo de permissão {permissionGroup!.Id} - {permissionGroup!.Name}");
+                return InternalServerError(new PermissionGroupDTO(), $"deletar o Grupo de Permissão {permissionGroup!.Id} - {permissionGroup!.Name}");
             }
 
             permissionGroupDTO = _mapper.Map<PermissionGroupDTO>(permissionGroup);

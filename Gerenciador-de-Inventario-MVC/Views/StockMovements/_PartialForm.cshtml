@@ -1,0 +1,48 @@
+﻿@using Shared.Helper
+@model Application.DTO.StockMovementsDTO
+
+@{
+    this.Layout = null;
+}
+
+<!-- Form -->
+<form id="stockMovementsForm">
+    <input asp-for="Id" hidden />
+    @for (var i = 0; i < Model.ListProduct.Count; i++)
+    {
+        <input type="hidden" name="ListProduct[@i].Id" value="@Model.ListProduct[i].Id" />
+        <input type="hidden" name="ListProduct[@i].Name" value="@Model.ListProduct[i].Name" />
+        <input type="hidden" name="ListProduct[@i].UnitType" value="@Model.ListProduct[i].UnitType" />
+    }
+
+    <div class="row">
+        <div class="form-group col-md-2">
+            <label asp-for="Id">Id</label>
+            <input type="number" class="form-control" asp-for="Id" disabled />
+        </div>
+         
+        @if (Util.IsNullOrZero(Model.Id))
+        {
+            <div class="form-group col-md-4">
+                <label asp-for="IdProduct">Produto</label>
+                <select asp-for="IdProduct" class="form-select"
+                        asp-items="@(new SelectList(Model.GetListProduct(), "Value", "Text", Model.IdProduct))">
+                </select>
+            </div>
+        } else
+        {
+            <div class="form-group col-md-4">
+                <label asp-for="ProductName">Produto</label>
+                <input type="text" class="form-control" asp-for="ProductName" value="@Model.IdProduct - @Model.ProductName" />
+            </div>
+        }
+
+        <div class="form-group col-md-4">
+            <label asp-for="Quantity">Quantidade</label>
+            <input type="number" class="form-control" asp-for="Quantity" />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+    </div>
+</form>
+
+<script src="~/js/Domain/StockMovements/Form.js" asp-append-version="true"></script>

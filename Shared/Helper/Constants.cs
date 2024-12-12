@@ -12,6 +12,12 @@
         public const string LoggerName = "LoggerUserName";
         public const string LoggerPhoto = "LoggerUserPhoto";
 
+        //Tipo da Movitação
+        public const string Input = "input";
+        public const string InputText = "Entrada";
+        public const string Output = "output";
+        public const string OutputText = "Saida";
+
         // Botões
         public const string Close = "Fechar";
         public const string Save = "Gravar";

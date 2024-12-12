@@ -16,6 +16,21 @@ namespace Shared.Helper
             return value ? "border border-success" : "border border-danger";
         }
 
+        public static string GetColorMovementType(string value)
+        {
+            return value == Constants.Input ? "border border-success" : "border border-danger";
+        }
+
+        public static string GetColorMovementTypeText(string value)
+        {
+            return value == Constants.Input ? "text-success" : "text-danger";
+        }
+
+        public static string GetMovementTypeText(string value)
+        {
+            return value == Constants.Input ? Constants.InputText : Constants.OutputText;
+        }
+
         public static string ValidateActiveInativeColorText(bool value)
         {
             return value ? "text-success" : "text-danger";

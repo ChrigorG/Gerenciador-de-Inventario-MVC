@@ -1,4 +1,5 @@
 ﻿@using Application.DTO
+@using Shared.Helper
 @model Application.DTO.StockMovementsDTO
 
 @{
@@ -12,7 +13,7 @@
             <th scope="col">Unidade de Medida</th>
             <th scope="col">Tipo de Movimentação</th>
             <th scope="col">Quantidade</th>
-            <th scope="col">Valor x Quantidade</th>
+            <th scope="col">Data e hora</th>
             <th scope="col">Ação</th>
         </tr>
     </thead>
@@ -21,20 +22,33 @@
         {
             <tr>
                 <td>@stock.Id</td>
-                <td>@stock.ProductName</td>
+                <td>@stock.IdProduct - @stock.ProductName</td>
                 <td>@stock.UnitType</td>
-                <td>@stock.MovementType</td>
+                <td class="center-align">
+                    <span class="chip @ListStandard.GetColorMovementType(stock.MovementType)">
+                        <span class="@ListStandard.GetColorMovementTypeText(stock.MovementType)">
+                            @ListStandard.GetMovementTypeText(stock.MovementType)
+                        </span>
+                    </span>
+                </td>
                 <td>@stock.Quantity</td>
-                <td>R$ @(stock.ProductPrice * stock.Quantity)</td>
+                <td>@Util.DateHoursMinutes(stock.MovementDate)</td>
                 <td>
-                    <div class="dropdown">
-                        <button class="gear-button">
+                    <div class="dropdown-table">
+                        <button class="gear-button" onclick="toggleDropdownMenu(event)">
                             <span class="material-symbols-outlined">
                                 settings
                             </span>
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="/detalhar/1">Detalhar</a></li>
+                        <ul class="dropdown-table-menu">
+                            <li>
+                                <a class="d-flex align-items-center" onclick="OpenDetailStockMovements(@stock.Id)">
+                                    <span class="material-symbols-outlined fs-5 me-2">
+                                        info
+                                    </span>
+                                    Detalhar
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </td>

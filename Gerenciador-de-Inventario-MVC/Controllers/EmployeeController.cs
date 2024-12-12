@@ -60,6 +60,7 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
                     return Json(_responseDTO);
                 }
 
+                _responseDTO.Message = employeeDTO.Message;
                 _responseDTO.View = _viewRenderService.RenderToString(this, "_TableEmployee", employeeDTO);
                 return Json(_responseDTO);
             } catch (Exception)
