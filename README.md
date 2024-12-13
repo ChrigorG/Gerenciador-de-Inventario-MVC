@@ -29,6 +29,10 @@ Este projeto foi criado com foco no aprendizado e na prática de desenvolvimento
 ### Tela do cadastro de Funcionários
 ![image](https://github.com/user-attachments/assets/b56b7871-4150-42cd-9564-45362aabd5a2)
 
+### Tela de Movimentação de Estoque
+![image](https://github.com/user-attachments/assets/c906d9a4-0e11-4a00-856e-b1e5bc20bfcc)
+
+
 
 ## Modo de uso
 
