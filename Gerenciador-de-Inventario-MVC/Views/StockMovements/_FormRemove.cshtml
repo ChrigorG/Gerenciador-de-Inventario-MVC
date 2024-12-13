@@ -1,0 +1,35 @@
+﻿@using Shared.Helper
+@model Application.DTO.StockMovementsDTO
+
+@{
+    this.Layout = null;
+}
+
+<div class="modal fade" id="form-remove-stock-movements-modal" tabindex="-1" role="dialog" aria-labelledby="form-remove-stock-movements-modalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-modal-size" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Model.Title</h5>
+                <button type="button" class="close btn" data-bs-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="divPartialFormRemoveStockMovements">
+                <partial name="_PartialFormRemove" model="Model" />
+            </div>
+
+            <div class="modal-footer">
+                <div class="row w-100">
+                    @if (!Util.IsNullOrZero(Model.IdUserCreated) && !Util.IsNullOrDefault(Model.DatetimeCreate))
+                    {
+                        <div class="row">
+                            <span><strong>Criado por: </strong> <span id="createdBy">@Model.IdUserCreated - @Model.NameUserCreated em @Util.DateHoursMinutes(Model.DatetimeCreate)</span></span>
+                        </div>
+                    }
+                </div>
+                <button type="button" class="btn btn-secondary" id="closeFormRemoveStockMovements" data-bs-dismiss="modal">Voltar</button>
+                <button type="submit" class="btn btn-primary" id="submitStockMovementsFormRemove">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -68,6 +68,22 @@ namespace Application.Services
             return stockMovementsDTO;
         }
 
+        public StockMovementsDTO FormRemoveProductInStock()
+        {
+            StockMovementsDTO? stockMovementsDTO = new StockMovementsDTO();
+            string permission = this.GetPermission();
+            if (permission != Constants.PermissionAccess)
+            {
+                stockMovementsDTO.StatusErroMessage = true;
+                stockMovementsDTO.Message = "Acesso negado!";
+                return stockMovementsDTO;
+            }
+
+            stockMovementsDTO.ListProduct = _productService.GetList();
+            stockMovementsDTO.Title = "Venda / Saida de Produto";
+            return stockMovementsDTO;
+        }
+
         public StockMovementsDTO AddProductInStock(StockMovementsDTO stockMovementsDTO)
         {
             string permission = this.GetPermission();
@@ -98,6 +114,44 @@ namespace Application.Services
             return stockMovementsDTO;
         }
 
+        public StockMovementsDTO RemoveProductInStock(StockMovementsDTO stockMovementsDTO)
+        {
+            string permission = this.GetPermission();
+            if (permission != Constants.PermissionAccess)
+            {
+                stockMovementsDTO.StatusErroMessage = true;
+                stockMovementsDTO.Message = "Acesso negado!";
+                return stockMovementsDTO;
+            }
+
+            stockMovementsDTO.ValidatedDTO();
+            if (stockMovementsDTO.StatusErroMessage)
+            {
+                return stockMovementsDTO;
+            }
+
+            int quantityInStock = _stockMovementsRepository.SumQuantityProductInStock(stockMovementsDTO.IdProduct);
+            if (!this.CanRemoveQuantityProduct(quantityInStock, stockMovementsDTO.Quantity))
+            {
+                stockMovementsDTO.StatusErroMessage = true;
+                stockMovementsDTO.Message = $"Você não pode retirar essa quantidade de produto, a quantidade no estoque é {quantityInStock}.";
+                return stockMovementsDTO;
+            }
+
+            StockMovements? stockMovements = _mapper.Map<StockMovements>(stockMovementsDTO);
+            stockMovements.MovementDate = DateTime.Now;
+            stockMovements.MovementType = Constants.Output;
+            stockMovements = _stockMovementsRepository.Add(stockMovements);
+            if (stockMovements == null)
+            {
+                return InternalServerError(stockMovementsDTO, $"remover o produto do Estoque");
+            }
+
+            stockMovementsDTO = _mapper.Map<StockMovementsDTO>(stockMovements);
+            stockMovementsDTO.Message = "Produto removido do estoque com sucesso!";
+            return stockMovementsDTO;
+        }
+
         public StockMovementsDTO DetailProductInStock(int id)
         {
             StockMovementsDTO? stockMovementsDTO = new StockMovementsDTO();
@@ -117,11 +171,17 @@ namespace Application.Services
 
             stockMovementsDTO = _mapper.Map<StockMovementsDTO>(stockMovements);
             Product? product = _productRepository.Get(stockMovementsDTO.IdProduct);
+            Employee? employee = _employeeRepository.Get(stockMovementsDTO.IdUserCreated);
 
+            stockMovementsDTO.NameUserCreated = employee?.Name ?? "(Funcionario que criou foi desviculado do sistema)";
             stockMovementsDTO.ProductName = product?.Name ?? "Produto não está mais disponível";
-            stockMovementsDTO.ListStockMovements = this.GetList();
             stockMovementsDTO.Title = "Detalhe da Movimentação";
             return stockMovementsDTO;
+        }
+
+        private bool CanRemoveQuantityProduct(int quantityInStock, int quantityToRemove)
+        {
+            return quantityInStock > 0 && quantityInStock <= quantityToRemove ? true : false;
         }
 
         private string GetPermission()

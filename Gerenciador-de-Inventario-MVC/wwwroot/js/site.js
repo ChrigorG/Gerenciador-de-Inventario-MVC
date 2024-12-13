@@ -25,3 +25,33 @@ function toggleDropdownMenu(event) {
         }
     });
 }
+
+async function OpenFormRemoveProductInStock() {
+    $.ajax({
+        url: "/StockMovements/FormRemove",
+        type: "POST",
+        success: function (response) {
+            debugger;
+            console.log(response.view)
+            if (!response.statusErro) {
+                new Modal({
+                    id: "form-remove-stock-movements-modal",
+                    html: response.view
+                }).Create();
+            } else {
+                Swal.fire({
+                    title: "Atenção",
+                    text: response.message,
+                    icon: "warning"
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: "Atenção",
+                text: `Não foi possível completar a ação: ${error}`,
+                icon: "error"
+            });
+        }
+    });
+}

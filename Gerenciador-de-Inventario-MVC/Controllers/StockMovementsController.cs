@@ -53,6 +53,22 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
             }
         }
 
+        public IActionResult FormRemove()
+        {
+            try
+            {
+                StockMovementsDTO stockMovementsDTO = _stockMovementsService.FormRemoveProductInStock();
+                _responseDTO.StatusErro = false;
+                _responseDTO.View = _viewRenderService.RenderToString(this, "_FormRemove", stockMovementsDTO);
+                return Json(_responseDTO);
+            } catch (Exception)
+            {
+                _responseDTO.StatusErro = true;
+                _responseDTO.Message = "Ops, tivemos um problema interno, não foi possível abrir o formulário!";
+                return Json(_responseDTO);
+            }
+        }
+
         public IActionResult Save(StockMovementsDTO stockMovementsDTO)
         {
             try
@@ -65,6 +81,36 @@ namespace Gerenciador_de_Inventario_MVC.Controllers
                 }
 
                 stockMovementsDTO = _stockMovementsService.AddProductInStock(stockMovementsDTO);
+                if (stockMovementsDTO.StatusErroMessage)
+                {
+                    _responseDTO.StatusErro = true;
+                    _responseDTO.Message = stockMovementsDTO.Message;
+                    return Json(_responseDTO);
+                }
+
+                _responseDTO.Message = stockMovementsDTO.Message;
+                _responseDTO.View = _viewRenderService.RenderToString(this, "_TableStockMovements", stockMovementsDTO);
+                return Json(_responseDTO);
+            } catch (Exception)
+            {
+                _responseDTO.StatusErro = true;
+                _responseDTO.Message = "Ops, tivemos um problema interno, não foi possível gravar sua solicitação!";
+                return Json(_responseDTO);
+            }
+        }
+
+        public IActionResult Remove(StockMovementsDTO stockMovementsDTO)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    _responseDTO.StatusErro = true;
+                    _responseDTO.View = _viewRenderService.RenderToString(this, "_PartialFormRemove", stockMovementsDTO);
+                    return Json(_responseDTO);
+                }
+
+                stockMovementsDTO = _stockMovementsService.RemoveProductInStock(stockMovementsDTO);
                 if (stockMovementsDTO.StatusErroMessage)
                 {
                     _responseDTO.StatusErro = true;
